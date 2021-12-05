@@ -105,12 +105,13 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
       DataCell(Text(_total.toStringAsFixed(2))),
     ]));
     return Scrollbar(
+        scrollbarOrientation: ScrollbarOrientation.top,
         child: DataTable(columns: [
-      DataColumn(label: Text("Descri.")),
-      DataColumn(label: Text("Bruto")),
-      DataColumn(label: Text("Desc.")),
-      DataColumn(label: Text("Total")),
-    ], rows: list));
+          DataColumn(label: Text("Descri.")),
+          DataColumn(label: Text("Bruto")),
+          DataColumn(label: Text("Desc.")),
+          DataColumn(label: Text("Total")),
+        ], rows: list));
   }
 
   criarTabela(largura) {
