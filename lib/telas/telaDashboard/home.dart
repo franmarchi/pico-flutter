@@ -82,6 +82,8 @@ class _HomeState extends State<Home> {
             child: Expanded(
                 flex: 1,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
                       color: Colors.blue,
@@ -118,7 +120,7 @@ class _HomeState extends State<Home> {
                             )
                           : null,
                     ),
-                    Expanded(flex: 10, child: _tela[_telaAtual]),
+                    Expanded(child: _tela[_telaAtual]),
                   ],
                 )),
           ));

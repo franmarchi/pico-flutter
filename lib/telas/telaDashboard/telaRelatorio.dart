@@ -86,6 +86,33 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
     return _data;
   }
 
+  criarDataTable() {
+    List<DataRow> list = [];
+
+    for (var item in _relatorio) {
+      list.add(DataRow(cells: [
+        DataCell(Text(item.descricao)),
+        DataCell(Text(item.bruto.toStringAsFixed(2))),
+        DataCell(Text(item.desconto.toStringAsFixed(2))),
+        DataCell(Text(item.total.toStringAsFixed(2))),
+      ]));
+    }
+
+    list.add(DataRow(cells: [
+      DataCell(Text("Total")),
+      DataCell(Text(_bruto.toStringAsFixed(2))),
+      DataCell(Text(_desconto.toStringAsFixed(2))),
+      DataCell(Text(_total.toStringAsFixed(2))),
+    ]));
+    return Scrollbar(
+        child: DataTable(columns: [
+      DataColumn(label: Text("Descri.")),
+      DataColumn(label: Text("Bruto")),
+      DataColumn(label: Text("Desc.")),
+      DataColumn(label: Text("Total")),
+    ], rows: list));
+  }
+
   criarTabela(largura) {
     List<TableRow> list = [];
 
@@ -213,18 +240,20 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
       var largura = constraint.maxWidth;
       return Container(
           child: Padding(
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(20),
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 32),
+                      padding: EdgeInsets.only(top: 10),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: largura > 800 ? 350 : largura * 0.45,
+                            width: largura > 700 ? 320 : largura * 0.45,
                             height: 100,
                             child: Card(
                                 child: Padding(
@@ -241,10 +270,10 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                             )),
                           ),
                           SizedBox(
-                            width: 15,
+                            width: largura > 700 ? 15 : 5,
                           ),
                           Container(
-                            width: largura > 800 ? 350 : largura * 0.45,
+                            width: largura > 700 ? 320 : largura * 0.45,
                             height: 100,
                             child: Card(
                                 child: Padding(
@@ -267,7 +296,10 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                       height: 10,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 12, right: 12),
+                      padding: EdgeInsets.only(
+                          top: 10,
+                          left: 12,
+                          right: largura > 700 ? largura - 715 - 12 : 12),
                       child: Row(
                         children: [
                           Text(
@@ -303,18 +335,21 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                       ),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 20,
                     ),
-                    ElevatedButton(
-                        child: Text(
-                          "Pesquisar",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onPressed: _exibirRelatorio),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: ElevatedButton(
+                          child: Text(
+                            "Pesquisar",
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          onPressed: _exibirRelatorio),
+                    ),
                     SizedBox(
                       height: 10,
                     ),
-                    Card(
+                    /*Card(
                       child: Padding(
                           padding: EdgeInsets.all(17),
                           child: Row(
@@ -346,12 +381,15 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                               ),
                             ],
                           )),
-                    ),
+                    ),*/
                     SizedBox(
-                      height: 15,
+                      height: 20,
                     ),
-                    Text("$_mensagem"),
-                    criarTabela(largura)
+
+                    //criarTabela(largura)
+                    _relatorio.length > 0
+                        ? criarDataTable()
+                        : Text("$_mensagem"),
                   ],
                 ),
               )));

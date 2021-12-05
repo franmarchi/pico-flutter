@@ -88,54 +88,70 @@ class _TelaVerificarEmailState extends State<TelaVerificarEmail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
-          title: Text("Pico"),
-        ),
-        body: Container(
-          padding: EdgeInsets.all(20),
-          width: double.maxFinite,
-          height: double.maxFinite,
-          color: Colors.white,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 70,
+    return LayoutBuilder(builder: (context, constraint) {
+      var largura = constraint.maxWidth;
+      var alturaBarra = AppBar().preferredSize.height;
+
+      return Scaffold(
+          backgroundColor: largura > 700 ? Colors.blue : Colors.white,
+          appBar: largura > 700
+              ? null
+              : AppBar(
+                  iconTheme: IconThemeData(color: Colors.white),
+                  title: Text("Pico"),
                 ),
-                Center(
-                  child: Image.asset("imagens/logo.jpeg"),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  _mensagemErro,
-                  style: TextStyle(color: Colors.red),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(labelText: "Digite seu Email"),
-                    style: TextStyle(fontSize: 15),
-                    controller: _controllerEmail,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 50),
-                  child: ElevatedButton(
-                    child: Text(
-                      "Entrar",
-                      style: TextStyle(fontSize: 20),
+          body: Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 50, bottom: 50),
+              child: Card(
+                child: Container(
+                  padding: EdgeInsets.all(50),
+                  width: largura > 700 ? 500 : double.maxFinite,
+                  height: double.maxFinite,
+                  color: Colors.white,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 70,
+                        ),
+                        Center(
+                          child: Image.asset("imagens/logo.jpeg"),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          _mensagemErro,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: TextField(
+                            keyboardType: TextInputType.emailAddress,
+                            decoration:
+                                InputDecoration(labelText: "Digite seu Email"),
+                            style: TextStyle(fontSize: 15),
+                            controller: _controllerEmail,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 50),
+                          child: ElevatedButton(
+                            child: Text(
+                              "Entrar",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            onPressed: _verificarLogin,
+                          ),
+                        ),
+                      ],
                     ),
-                    onPressed: _verificarLogin,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ));
+          ));
+    });
   }
 }
