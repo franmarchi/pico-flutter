@@ -40,8 +40,9 @@ class Api {
     return sucesso;
   }
 
-  buscarRelatorio(String dataInicial, String dataFinal, String filial) async {
-    var urlRecuperarDadosUsuario = Uri.parse(url + "RelatorioScript.php");
+  buscarRelatorio(String dataInicial, String dataFinal, String filial,
+      String urlScript) async {
+    var urlRecuperarDadosUsuario = Uri.parse(url + urlScript);
     http.Response response;
     response = await http.post(
       urlRecuperarDadosUsuario,

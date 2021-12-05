@@ -56,6 +56,9 @@ class _TelaVerificarEmailState extends State<TelaVerificarEmail> {
         _exibirMensagemEmailNaoCadastrado();
       }
     }
+    setState(() {
+      _mensagemErro = "";
+    });
   }
 
   _exibirMensagemEmailNaoCadastrado() {

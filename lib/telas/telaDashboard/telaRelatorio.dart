@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:pico/model/entities/Filiais.dart';
+import 'package:pico/model/entities/ItensBonificados.dart';
 import 'package:pico/model/entities/Relatorio.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:pico/model/helper/Api.dart';
+import 'package:pico/model/widgetsAux/tabelas.dart';
 import 'package:pico/telas/telasLogin/telaAtualizarSenha1.dart';
 import 'package:pico/telas/telasLogin/telaLogin.dart';
 
@@ -20,7 +22,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   TextEditingController _controllerDataFinal = TextEditingController();
   String data1 = "";
   Api api = Api();
-  List<Relatorio> _relatorio = [];
+  List _relatorio = [];
   String dropdownValue = "";
   double _bruto = 0;
   double _desconto = 0;
@@ -28,6 +30,17 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   List<Filiais> _filiais = [];
   List<String> _nomeFiliais = [];
   String _mensagem = "";
+  Tabelas tabela = Tabelas();
+  List<String> _tipoRelatorio = [
+    "Itens Bonificados",
+    "Itens Vendidos",
+    "Itens Vendidos Vendedor",
+    "Vendas Canceladas",
+    "Vendas Credito",
+    "Vendas Detalhadas"
+  ];
+  String dropdownValue2 = "Itens Bonificados";
+  String urlScriptTabela = "";
 
   var maskFormatterData = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
@@ -44,10 +57,14 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
       }
     }
 
-    List listaTemporaria =
-        await api.buscarRelatorio(_dataInicial, _dataFinal, filialEscolhida);
+    urlScriptTabela = dropdownValue2;
+    String urlScript = dropdownValue2.replaceAll(" ", "");
+    urlScript = "Relatorio" + dropdownValue2 + "Script.php";
 
-    List<Relatorio>? relatorioRecuperado = [];
+    List listaTemporaria = await api.buscarRelatorio(
+        _dataInicial, _dataFinal, filialEscolhida, urlScript);
+
+    List? relatorioRecuperado = [];
 
     if (listaTemporaria.length == 0) {
       setState(() {
@@ -60,12 +77,20 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
     for (var item in listaTemporaria) {
       item = jsonDecode(item) as Map;
       var result = item.cast<dynamic, dynamic>();
-      Relatorio relatorio = Relatorio.fromMap(result);
-      _bruto = _bruto + relatorio.bruto;
-      _desconto = _desconto + relatorio.desconto;
-      _total = _total + relatorio.total;
-      relatorioRecuperado.add(relatorio);
+      if (dropdownValue == "") {
+        Relatorio relatorio = Relatorio.fromMap(result);
+        _bruto = _bruto + relatorio.bruto;
+        _desconto = _desconto + relatorio.desconto;
+        _total = _total + relatorio.total;
+        relatorioRecuperado.add(relatorio);
+      } else if (dropdownValue2 == "Itens Bonificados") {
+        ItensBonificados itensBonificados = ItensBonificados.fromMap(result);
+        _desconto = _desconto + itensBonificados.quantidade;
+        _total = _total + itensBonificados.total;
+        relatorioRecuperado.add(itensBonificados);
+      }
     }
+
     setState(() {
       _relatorio = relatorioRecuperado!;
       _bruto;
@@ -87,117 +112,8 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   }
 
   criarDataTable() {
-    List<DataRow> list = [];
-
-    for (var item in _relatorio) {
-      list.add(DataRow(cells: [
-        DataCell(Text(item.descricao)),
-        DataCell(Text(item.bruto.toStringAsFixed(2))),
-        DataCell(Text(item.desconto.toStringAsFixed(2))),
-        DataCell(Text(item.total.toStringAsFixed(2))),
-      ]));
-    }
-
-    list.add(DataRow(cells: [
-      DataCell(Text("Total")),
-      DataCell(Text(_bruto.toStringAsFixed(2))),
-      DataCell(Text(_desconto.toStringAsFixed(2))),
-      DataCell(Text(_total.toStringAsFixed(2))),
-    ]));
-    return Scrollbar(
-        scrollbarOrientation: ScrollbarOrientation.top,
-        child: DataTable(columns: [
-          DataColumn(label: Text("Descri.")),
-          DataColumn(label: Text("Bruto")),
-          DataColumn(label: Text("Desc.")),
-          DataColumn(label: Text("Total")),
-        ], rows: list));
-  }
-
-  criarTabela(largura) {
-    List<TableRow> list = [];
-
-    if (_relatorio.length > 0) {
-      list.add(TableRow(children: [
-        Container(
-          alignment: Alignment.center,
-          child: Text("Forma de Pagamento",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
-          padding: EdgeInsets.all(4.0),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text("Bruto",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
-          padding: EdgeInsets.all(4.0),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text("Desc",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
-          padding: EdgeInsets.all(4.0),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text("Liquido",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
-          padding: EdgeInsets.all(4.0),
-        ),
-      ]));
-    }
-
-    for (var item in _relatorio) {
-      list.add(TableRow(children: [
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            item.descricao,
-            style: TextStyle(fontSize: 13.0),
-          ),
-          padding: EdgeInsets.all(4.0),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            item.bruto.toStringAsFixed(2),
-            style: TextStyle(fontSize: 13.0),
-          ),
-          padding: EdgeInsets.all(4.0),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            item.desconto.toStringAsFixed(2),
-            style: TextStyle(fontSize: 13.0),
-          ),
-          padding: EdgeInsets.all(4.0),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            item.total.toStringAsFixed(2),
-            style: TextStyle(fontSize: 13.0),
-          ),
-          padding: EdgeInsets.all(4.0),
-        ),
-      ]));
-    }
-
-    if (_relatorio.length > 0) {
-      list.add(TableRow(children: [
-        Text("Total"),
-        Text(_bruto.toStringAsFixed(2)),
-        Text(_desconto.toStringAsFixed(2)),
-        Text(_total.toStringAsFixed(2))
-      ]));
-    }
-
-    return Table(
-      defaultColumnWidth:
-          FixedColumnWidth(largura < 800 ? largura * 0.20 : 150),
-      border: TableBorder.all(),
-      children: list,
-    );
+    return tabela.exibirTabela(
+        _relatorio, _bruto, _desconto, _total, urlScriptTabela);
   }
 
   dataAtual() {
@@ -339,6 +255,48 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                       height: 20,
                     ),
                     Padding(
+                      padding: EdgeInsets.only(
+                          top: 10,
+                          left: 12,
+                          right: largura > 700 ? largura - 715 - 12 : 12),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Relatorio:  ",
+                            style:
+                                new TextStyle(fontSize: 15, color: Colors.blue),
+                          ),
+                          Expanded(
+                              child: DropdownButton<String>(
+                            value: dropdownValue2,
+                            icon: const Icon(Icons.arrow_downward),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.blue,
+                            ),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownValue2 = newValue!;
+                              });
+                            },
+                            items: _tipoRelatorio
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ))
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
                       padding: EdgeInsets.only(left: 20),
                       child: ElevatedButton(
                           child: Text(
@@ -350,44 +308,9 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                     SizedBox(
                       height: 10,
                     ),
-                    /*Card(
-                      child: Padding(
-                          padding: EdgeInsets.all(17),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Resumo do relatorio"),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    "Bruto: R\$ ${_bruto.toStringAsFixed(2)}",
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.green),
-                                  ),
-                                  Text(
-                                    "Desconto: R\$ ${_desconto.toStringAsFixed(2)}",
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.red),
-                                  ),
-                                  Text(
-                                    "Total: R\$ ${_total.toStringAsFixed(2)}",
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.blue),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
-                    ),*/
                     SizedBox(
                       height: 20,
                     ),
-
-                    //criarTabela(largura)
                     _relatorio.length > 0
                         ? criarDataTable()
                         : Text("$_mensagem"),
