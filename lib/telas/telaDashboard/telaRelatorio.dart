@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:pico/model/entities/Filiais.dart';
 import 'package:pico/model/entities/ItensBonificados.dart';
+import 'package:pico/model/entities/ItensVendidoVendedor.dart';
 import 'package:pico/model/entities/Relatorio.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:pico/model/entities/RelatorioVendasCanceladas.dart';
+import 'package:pico/model/entities/RelatorioVendasCredito.dart';
+import 'package:pico/model/entities/RelatorioVendasDetalhadas.dart';
 import 'package:pico/model/helper/Api.dart';
 import 'package:pico/model/widgetsAux/tabelas.dart';
 import 'package:pico/telas/telasLogin/telaAtualizarSenha1.dart';
@@ -59,7 +63,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
 
     urlScriptTabela = dropdownValue2;
     String urlScript = dropdownValue2.replaceAll(" ", "");
-    urlScript = "Relatorio" + dropdownValue2 + "Script.php";
+    urlScript = "Relatorio" + urlScript + "Script.php";
 
     List listaTemporaria = await api.buscarRelatorio(
         _dataInicial, _dataFinal, filialEscolhida, urlScript);
@@ -77,20 +81,42 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
     for (var item in listaTemporaria) {
       item = jsonDecode(item) as Map;
       var result = item.cast<dynamic, dynamic>();
-      if (dropdownValue == "") {
-        Relatorio relatorio = Relatorio.fromMap(result);
-        _bruto = _bruto + relatorio.bruto;
-        _desconto = _desconto + relatorio.desconto;
-        _total = _total + relatorio.total;
-        relatorioRecuperado.add(relatorio);
-      } else if (dropdownValue2 == "Itens Bonificados") {
+      if (dropdownValue2 == "Itens Bonificados" ||
+          dropdownValue2 == "Itens Vendidos") {
         ItensBonificados itensBonificados = ItensBonificados.fromMap(result);
         _desconto = _desconto + itensBonificados.quantidade;
         _total = _total + itensBonificados.total;
         relatorioRecuperado.add(itensBonificados);
+      } else if (dropdownValue2 == "Itens Vendidos Vendedor") {
+        ItensVendidoVendedor itensVendidoVendedor =
+            ItensVendidoVendedor.fromMap(result);
+        _desconto = _desconto + itensVendidoVendedor.quantidade;
+        _total = _total + itensVendidoVendedor.total;
+        relatorioRecuperado.add(itensVendidoVendedor);
+      } else if (dropdownValue2 == "Vendas Canceladas") {
+        RelatorioVendasCanceladas relatorioVendasCanceladas =
+            RelatorioVendasCanceladas.fromMap(result);
+        _bruto = _bruto + relatorioVendasCanceladas.subtotal;
+        _desconto = _desconto + relatorioVendasCanceladas.desconto;
+        _total = _total + relatorioVendasCanceladas.total;
+        relatorioRecuperado.add(relatorioVendasCanceladas);
+      } else if (dropdownValue2 == "Vendas Credito") {
+        RelatorioVendasCredito relatorioVendasCredito =
+            RelatorioVendasCredito.fromMap(result);
+        _bruto = _bruto + relatorioVendasCredito.bruto;
+        _desconto = _desconto + relatorioVendasCredito.desconto;
+        _total = _total + relatorioVendasCredito.total;
+        relatorioRecuperado.add(relatorioVendasCredito);
+      } else if (dropdownValue2 == "Vendas Detalhadas") {
+        RelatorioVendasDetalhadas relatorioVendasDetalhadas =
+            RelatorioVendasDetalhadas.fromMap(result);
+        _bruto = _bruto + relatorioVendasDetalhadas.subtotal;
+        _desconto = _desconto + relatorioVendasDetalhadas.desconto;
+        _total = _total + relatorioVendasDetalhadas.total;
+        relatorioRecuperado.add(relatorioVendasDetalhadas);
       }
     }
-
+    print(_relatorio);
     setState(() {
       _relatorio = relatorioRecuperado!;
       _bruto;
