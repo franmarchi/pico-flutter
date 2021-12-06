@@ -240,18 +240,17 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 10,
-                          left: 12,
-                          right: largura > 700 ? largura - 715 - 12 : 12),
+                        top: 10,
+                        left: 12,
+                      ),
                       child: Row(
                         children: [
                           Text(
-                            "Filiais  ",
+                            "Filiais:  ",
                             style:
                                 new TextStyle(fontSize: 15, color: Colors.blue),
                           ),
-                          Expanded(
-                              child: DropdownButton<String>(
+                          DropdownButton<String>(
                             value: dropdownValue,
                             icon: const Icon(Icons.arrow_downward),
                             iconSize: 24,
@@ -273,7 +272,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                 child: Text(value),
                               );
                             }).toList(),
-                          ))
+                          )
                         ],
                       ),
                     ),
@@ -292,8 +291,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                             style:
                                 new TextStyle(fontSize: 15, color: Colors.blue),
                           ),
-                          Expanded(
-                              child: DropdownButton<String>(
+                          DropdownButton<String>(
                             value: dropdownValue2,
                             icon: const Icon(Icons.arrow_downward),
                             iconSize: 24,
@@ -315,7 +313,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                 child: Text(value),
                               );
                             }).toList(),
-                          ))
+                          )
                         ],
                       ),
                     ),
