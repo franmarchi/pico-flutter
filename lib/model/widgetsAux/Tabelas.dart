@@ -22,8 +22,8 @@ class Tabelas {
         DataCell(Text(_desconto.toStringAsFixed(2))),
         DataCell(Text(_total.toStringAsFixed(2))),
       ]));
-      return Scrollbar(
-          scrollbarOrientation: ScrollbarOrientation.top,
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
             DataColumn(label: Text("Descri.")),
             DataColumn(label: Text("Bruto")),
@@ -44,8 +44,8 @@ class Tabelas {
         DataCell(Text(_desconto.toStringAsFixed(0))),
         DataCell(Text(_total.toStringAsFixed(0))),
       ]));
-      return Scrollbar(
-          scrollbarOrientation: ScrollbarOrientation.top,
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
             DataColumn(label: Text("Nome")),
             DataColumn(label: Text("Quant.")),
@@ -67,8 +67,8 @@ class Tabelas {
         DataCell(Text(_desconto.toStringAsFixed(0))),
         DataCell(Text(_total.toStringAsFixed(0))),
       ]));
-      return Scrollbar(
-          scrollbarOrientation: ScrollbarOrientation.top,
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
             DataColumn(label: Text("Nome")),
             DataColumn(label: Text("Produto")),
@@ -101,8 +101,8 @@ class Tabelas {
         DataCell(Text("")),
         DataCell(Text("")),
       ]));
-      return Scrollbar(
-          scrollbarOrientation: ScrollbarOrientation.top,
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
             DataColumn(label: Text("Venda")),
             DataColumn(label: Text("Apelido")),
@@ -132,8 +132,8 @@ class Tabelas {
         DataCell(Text(_desconto.toStringAsFixed(0))),
         DataCell(Text(_total.toStringAsFixed(2))),
       ]));
-      return Scrollbar(
-          scrollbarOrientation: ScrollbarOrientation.top,
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
             DataColumn(label: Text("Codigo")),
             DataColumn(label: Text("Desc.")),
@@ -167,8 +167,8 @@ class Tabelas {
         DataCell(Text("")),
         DataCell(Text("")),
       ]));
-      return Scrollbar(
-          scrollbarOrientation: ScrollbarOrientation.top,
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
             DataColumn(label: Text("Venda")),
             DataColumn(label: Text("Apelido")),
