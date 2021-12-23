@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
                       },
                     ),
                     ListTile(
-                      title: Text("Relatorio 2"),
+                      title: Text("Relatorio Gerenciais"),
                       onTap: () {},
                     ),
                   ],

@@ -36,14 +36,15 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   String _mensagem = "";
   Tabelas tabela = Tabelas();
   List<String> _tipoRelatorio = [
-    "Itens Bonificados",
-    "Itens Vendidos",
-    "Itens Vendidos Vendedor",
-    "Vendas Canceladas",
+    "Vendas Sintetico",
     "Vendas Credito",
-    "Vendas Detalhadas"
+    "Vendas Analitico",
+    "Vendas Canceladas",
+    "Itens Vendidos",
+    "Itens Bonificados",
+    "Itens Vendidos por Vendedor"
   ];
-  String dropdownValue2 = "Itens Bonificados";
+  String dropdownValue2 = "Vendas Sintetico";
   String urlScriptTabela = "";
 
   var maskFormatterData = new MaskTextInputFormatter(
@@ -87,7 +88,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
         _desconto = _desconto + itensBonificados.quantidade;
         _total = _total + itensBonificados.total;
         relatorioRecuperado.add(itensBonificados);
-      } else if (dropdownValue2 == "Itens Vendidos Vendedor") {
+      } else if (dropdownValue2 == "Itens Vendidos por Vendedor") {
         ItensVendidoVendedor itensVendidoVendedor =
             ItensVendidoVendedor.fromMap(result);
         _desconto = _desconto + itensVendidoVendedor.quantidade;
@@ -107,13 +108,19 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
         _desconto = _desconto + relatorioVendasCredito.desconto;
         _total = _total + relatorioVendasCredito.total;
         relatorioRecuperado.add(relatorioVendasCredito);
-      } else if (dropdownValue2 == "Vendas Detalhadas") {
+      } else if (dropdownValue2 == "Vendas Analitico") {
         RelatorioVendasDetalhadas relatorioVendasDetalhadas =
             RelatorioVendasDetalhadas.fromMap(result);
         _bruto = _bruto + relatorioVendasDetalhadas.subtotal;
         _desconto = _desconto + relatorioVendasDetalhadas.desconto;
         _total = _total + relatorioVendasDetalhadas.total;
         relatorioRecuperado.add(relatorioVendasDetalhadas);
+      } else if (dropdownValue2 == "Vendas Sintetico") {
+        Relatorio relatorio = Relatorio.fromMap(result);
+        _bruto = _bruto + relatorio.bruto;
+        _desconto = _desconto + relatorio.desconto;
+        _total = _total + relatorio.total;
+        relatorioRecuperado.add(relatorio);
       }
     }
     print(_relatorio);
@@ -143,11 +150,11 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   }
 
   dataAtual() {
-    var now = DateTime.now();
-    final DateFormat formatter = DateFormat('dd/MM/yyyy');
-    final String formatted = formatter.format(now);
+    var _now = DateTime.now();
+    final DateFormat _formatter = DateFormat('dd/MM/yyyy');
+    final String _formatted = _formatter.format(_now);
 
-    return formatted;
+    return _formatted;
   }
 
   void _exibirFiliais() async {
@@ -287,7 +294,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                       child: Row(
                         children: [
                           Text(
-                            "Relatorio:  ",
+                            "Relatório:  ",
                             style:
                                 new TextStyle(fontSize: 15, color: Colors.blue),
                           ),
