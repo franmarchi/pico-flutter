@@ -34,7 +34,7 @@ class _TelaLoginState extends State<TelaLogin> {
     if (_camposValidos == true) {
       if (widget.retorno["senha"] == _senhaDigitado) {
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => Home(widget.retorno)));
+            MaterialPageRoute(builder: (context) => Home(/*widget.retorno*/)));
       } else {
         setState(() {
           _mensagemErro = "senha incorreta";

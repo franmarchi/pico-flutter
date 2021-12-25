@@ -24,6 +24,8 @@ class TelaRelatorio extends StatefulWidget {
 class _TelaRelatorioState extends State<TelaRelatorio> {
   TextEditingController _controllerDataInic = TextEditingController();
   TextEditingController _controllerDataFinal = TextEditingController();
+  String dataInicString = "";
+  String dataFinalString = "";
   String data1 = "";
   Api api = Api();
   List _relatorio = [];
@@ -53,6 +55,8 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   void _exibirRelatorio() async {
     String _dataInicial = _formatarData(_controllerDataInic.text);
     String _dataFinal = _formatarData(_controllerDataFinal.text);
+    dataInicString = _controllerDataInic.text;
+    dataFinalString = _controllerDataFinal.text;
     String filialEscolhida = "";
     if (dropdownValue != "") {
       for (var item in _filiais) {
@@ -182,6 +186,10 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
     // TODO: implement initState
     super.initState();
     _exibirFiliais();
+    if (dataInicString == "" || dataFinalString == "") {
+      dataInicString = dataAtual();
+      dataFinalString = dataAtual();
+    }
   }
 
   @override
@@ -214,7 +222,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                     InputDecoration(labelText: "Data inicial"),
                                 style: TextStyle(fontSize: 15),
                                 controller: _controllerDataInic
-                                  ..text = dataAtual(),
+                                  ..text = dataInicString,
                                 inputFormatters: [maskFormatterData],
                               ),
                             )),
@@ -234,7 +242,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                     InputDecoration(labelText: "Data Final"),
                                 style: TextStyle(fontSize: 15),
                                 controller: _controllerDataFinal
-                                  ..text = dataAtual(),
+                                  ..text = dataFinalString,
                                 inputFormatters: [maskFormatterData],
                               ),
                             )),

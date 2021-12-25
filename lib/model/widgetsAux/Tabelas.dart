@@ -1,4 +1,7 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:pico/model/entities/ItensVendidoVendedor.dart';
 
 class Tabelas {
   Tabelas();
@@ -51,14 +54,6 @@ class Tabelas {
         ]));
       }
 
-      list.add(DataRow(cells: [
-        DataCell(
-            Text("Total", style: new TextStyle(fontWeight: FontWeight.bold))),
-        DataCell(Text(_desconto.toStringAsFixed(0),
-            style: new TextStyle(fontWeight: FontWeight.bold))),
-        DataCell(Text("R\$ " + _total.toStringAsFixed(2),
-            style: new TextStyle(fontWeight: FontWeight.bold))),
-      ]));
       return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
@@ -73,22 +68,80 @@ class Tabelas {
                     style: new TextStyle(fontWeight: FontWeight.bold))),
           ], rows: list));
     } else if (tipo == "Itens Vendidos por Vendedor") {
+      List<List<ItensVendidoVendedor>> listaDeLista = [];
+      bool? adicionado;
       for (var item in _relatorio) {
-        list.add(DataRow(cells: [
-          DataCell(Text(item.apelido)),
-          DataCell(Text(item.nome)),
-          DataCell(Text(item.quantidade.toString())),
-          DataCell(Text(item.total.toStringAsFixed(2))),
-        ]));
+        if (listaDeLista.isEmpty) {
+          List<ItensVendidoVendedor> list = [item];
+          listaDeLista.add(list);
+        } else {
+          for (var itemLista in listaDeLista) {
+            for (var objitem in itemLista) {
+              if (objitem.apelido == item.apelido) {
+                itemLista.add(item);
+                print("Dentro do if: " + listaDeLista.toString());
+                adicionado = true;
+                break;
+              } else {
+                adicionado = false;
+              }
+            }
+          }
+          if (adicionado == false) {
+            List<ItensVendidoVendedor> list = [item];
+            listaDeLista.add(list);
+          }
+        }
       }
 
-      list.add(DataRow(cells: [
-        DataCell(Text("Total")),
-        DataCell(Text("")),
-        DataCell(Text(_desconto.toStringAsFixed(0))),
-        DataCell(Text(_total.toStringAsFixed(0))),
-      ]));
-      return SingleChildScrollView(
+      criarRows(lista) {
+        List<DataRow> list = [];
+        for (var item in lista) {
+          list.add(DataRow(cells: [
+            DataCell(Text(item.nome)),
+            DataCell(Text(item.quantidade.toString())),
+            DataCell(Text(item.total.toStringAsFixed(2))),
+          ]));
+        }
+        return list;
+      }
+
+      return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: listaDeLista.length,
+          itemBuilder: (context, index) {
+            final itemLista = listaDeLista[index];
+            return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          "Vendedor: ${itemLista[0].apelido}",
+                          style: TextStyle(fontSize: 18),
+                        )),
+                    DataTable(columns: [
+                      DataColumn(
+                          label: Text("Produto",
+                              style:
+                                  new TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Quantidade",
+                              style:
+                                  new TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Total",
+                              style:
+                                  new TextStyle(fontWeight: FontWeight.bold))),
+                    ], rows: criarRows(itemLista)),
+                  ],
+                ));
+          });
+
+      /*SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: DataTable(columns: [
             DataColumn(
@@ -103,7 +156,7 @@ class Tabelas {
             DataColumn(
                 label: Text("Total",
                     style: new TextStyle(fontWeight: FontWeight.bold))),
-          ], rows: list));
+          ], rows: list));*/
     } else if (tipo == "Vendas Canceladas") {
       for (var item in _relatorio) {
         list.add(DataRow(cells: [

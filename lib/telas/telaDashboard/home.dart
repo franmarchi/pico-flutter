@@ -3,8 +3,9 @@ import 'package:pico/telas/telaDashboard/appbarMobile.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorio.dart';
 
 class Home extends StatefulWidget {
-  Map<dynamic, dynamic> retorno;
-  Home(this.retorno);
+  const Home({Key? key}) : super(key: key);
+  /*Map<dynamic, dynamic> retorno;
+  Home(this.retorno);*/
 
   @override
   _HomeState createState() => _HomeState();
@@ -47,11 +48,11 @@ class _HomeState extends State<Home> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${widget.retorno["nome"]}",
+                                  /*"${widget.retorno["nome"]}"*/ "",
                                   style: TextStyle(
                                       fontSize: 20, color: Colors.white),
                                 ),
-                                Text("${widget.retorno["email"]}",
+                                Text(/*"${widget.retorno["email"]}"*/ "",
                                     style: TextStyle(
                                         fontSize: 15, color: Colors.white)),
                               ],
