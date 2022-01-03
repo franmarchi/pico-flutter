@@ -7,7 +7,7 @@ import 'package:pico/telas/telasLogin/telaVerificarEmail.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Home(),
+    home: TelaVerificarEmail(),
     debugShowCheckedModeBanner: false,
   ));
 }

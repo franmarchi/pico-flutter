@@ -49,7 +49,10 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   String dropdownValue2 = "Vendas Sintetico";
   String urlScriptTabela = "";
 
-  var maskFormatterData = new MaskTextInputFormatter(
+  var maskFormatterDataInic = new MaskTextInputFormatter(
+      mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
+
+  var maskFormatterDataFinal = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
   void _exibirRelatorio() async {
@@ -77,7 +80,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
 
     if (listaTemporaria.length == 0) {
       setState(() {
-        _mensagem = "Não há dados para o período selecionado";
+        _mensagem = "Não há dados para o período selecionado!";
       });
     }
     _bruto = 0;
@@ -223,7 +226,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                 style: TextStyle(fontSize: 15),
                                 controller: _controllerDataInic
                                   ..text = dataInicString,
-                                inputFormatters: [maskFormatterData],
+                                inputFormatters: [maskFormatterDataInic],
                               ),
                             )),
                           ),
@@ -243,7 +246,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                 style: TextStyle(fontSize: 15),
                                 controller: _controllerDataFinal
                                   ..text = dataFinalString,
-                                inputFormatters: [maskFormatterData],
+                                inputFormatters: [maskFormatterDataFinal],
                               ),
                             )),
                           )
@@ -277,6 +280,8 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                             ),
                             onChanged: (String? newValue) {
                               setState(() {
+                                dataInicString = _controllerDataInic.text;
+                                dataFinalString = _controllerDataFinal.text;
                                 dropdownValue = newValue!;
                               });
                             },
@@ -318,6 +323,8 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                             ),
                             onChanged: (String? newValue) {
                               setState(() {
+                                dataInicString = _controllerDataInic.text;
+                                dataFinalString = _controllerDataFinal.text;
                                 dropdownValue2 = newValue!;
                               });
                             },
@@ -352,7 +359,8 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                     ),
                     _relatorio.length > 0
                         ? criarDataTable()
-                        : Text("$_mensagem"),
+                        : Text("$_mensagem",
+                            style: new TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
               )));
