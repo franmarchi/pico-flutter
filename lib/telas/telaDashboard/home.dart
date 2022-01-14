@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pico/telas/telaDashboard/appbarMobile.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorio.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioABCProdutos.dart';
+import 'package:pico/telas/telaDashboard/telaRelatorioABCVendedor.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioGerenciais.dart';
 
 class Home extends StatefulWidget {
@@ -15,7 +16,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _telaAtual = 0;
-  List _tela = [TelaRelatorio(), TelaRelatorioABCProdutos()];
+  List _tela = [
+    TelaRelatorio(),
+    TelaRelatorioABCProdutos(),
+    TelaRelatorioABCVendedor()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +90,7 @@ class _HomeState extends State<Home> {
                       title: Text("Relatorio G. curva ABC Venda"),
                       onTap: () {
                         setState(() {
-                          _telaAtual = 1;
+                          _telaAtual = 2;
                         });
                         Navigator.pop(context);
                       },
@@ -157,7 +162,7 @@ class _HomeState extends State<Home> {
                               ),
                               onTap: () {
                                 setState(() {
-                                  _telaAtual = 0;
+                                  _telaAtual = 2;
                                 });
                               },
                             ),

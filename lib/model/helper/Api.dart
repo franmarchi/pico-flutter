@@ -122,6 +122,32 @@ class Api {
     List relatorio = retorno.split("/");
 
     relatorio.removeLast();
+
+    return relatorio;
+  }
+
+  buscarRelatorioABCVenda(
+      String dataInicial, String dataFinal, String filial, String radio) async {
+    var urlRecuperarDadosUsuario =
+        Uri.parse(url + "RelatorioGerencialCurvaABCVendaFilialScript.php");
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {
+        'dataInicio': '$dataInicial',
+        'dataFim': '$dataFinal',
+        'filial': '$filial',
+        'radiobutton': '$radio',
+      },
+    );
+
+    String retorno = jsonDecode(jsonEncode(response.body));
+
+    retorno = retorno.replaceAll("}", "}/");
+    retorno = retorno.replaceAll("'", "");
+    List relatorio = retorno.split("/");
+
+    relatorio.removeLast();
     print(relatorio);
 
     return relatorio;
