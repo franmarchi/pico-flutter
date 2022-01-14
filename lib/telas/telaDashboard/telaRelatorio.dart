@@ -11,8 +11,6 @@ import 'package:pico/model/entities/RelatorioVendasCredito.dart';
 import 'package:pico/model/entities/RelatorioVendasDetalhadas.dart';
 import 'package:pico/model/helper/Api.dart';
 import 'package:pico/model/widgetsAux/tabelas.dart';
-import 'package:pico/telas/telasLogin/telaAtualizarSenha1.dart';
-import 'package:pico/telas/telasLogin/telaLogin.dart';
 
 class TelaRelatorio extends StatefulWidget {
   const TelaRelatorio({Key? key}) : super(key: key);
@@ -130,7 +128,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
         relatorioRecuperado.add(relatorio);
       }
     }
-    print(_relatorio);
+
     setState(() {
       _relatorio = relatorioRecuperado!;
       _bruto;

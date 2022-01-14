@@ -22,6 +22,6 @@ class Filiais {
 
   Filiais.fromMap(Map retorno) {
     this.codigo = retorno["codigo"] ?? "";
-    this.filial = retorno["filial"] ?? "";
+    this.filial = retorno["descricao"] ?? "";
   }
 }

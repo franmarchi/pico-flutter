@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pico/telas/telaDashboard/appbarMobile.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorio.dart';
+import 'package:pico/telas/telaDashboard/telaRelatorioABCProdutos.dart';
+import 'package:pico/telas/telaDashboard/telaRelatorioGerenciais.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _telaAtual = 0;
-  List _tela = [TelaRelatorio()];
+  List _tela = [TelaRelatorio(), TelaRelatorioABCProdutos()];
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +69,44 @@ class _HomeState extends State<Home> {
                         setState(() {
                           _telaAtual = 0;
                         });
+                        Navigator.pop(context);
                       },
                     ),
                     ListTile(
-                      title: Text("Relatorio Gerenciais"),
-                      onTap: () {},
+                      title: Text("Relatorio G. curva ABC Produtos"),
+                      onTap: () {
+                        setState(() {
+                          _telaAtual = 1;
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text("Relatorio G. curva ABC Venda"),
+                      onTap: () {
+                        setState(() {
+                          _telaAtual = 1;
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text("Grupo produtos"),
+                      onTap: () {
+                        setState(() {
+                          _telaAtual = 1;
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text("Venda dia"),
+                      onTap: () {
+                        setState(() {
+                          _telaAtual = 1;
+                        });
+                        Navigator.pop(context);
+                      },
                     ),
                   ],
                 ),
@@ -85,9 +120,9 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  color: Colors.blue,
+                  color: Colors.lightBlue[800],
                   height: double.maxFinite,
-                  width: largura > 700 ? 175 : null,
+                  width: largura > 700 ? 250 : null,
                   //color: Colors.grey,
                   child: largura > 700
                       ? ListView(
@@ -106,7 +141,18 @@ class _HomeState extends State<Home> {
                             ),
                             ListTile(
                               title: Text(
-                                "Relatorio Gerenciais",
+                                "Relatorio G. curva ABC Produtos",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  _telaAtual = 1;
+                                });
+                              },
+                            ),
+                            ListTile(
+                              title: Text(
+                                "Relatorio G. curva ABC Venda",
                                 style: TextStyle(color: Colors.white),
                               ),
                               onTap: () {
@@ -114,7 +160,29 @@ class _HomeState extends State<Home> {
                                   _telaAtual = 0;
                                 });
                               },
-                            )
+                            ),
+                            ListTile(
+                              title: Text(
+                                "Grupo produtos",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  _telaAtual = 0;
+                                });
+                              },
+                            ),
+                            ListTile(
+                              title: Text(
+                                "Venda dia",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  _telaAtual = 0;
+                                });
+                              },
+                            ),
                           ],
                         )
                       : null,

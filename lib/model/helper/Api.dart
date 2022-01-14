@@ -3,6 +3,7 @@ import 'dart:convert';
 
 class Api {
   String url = "http://192.168.0.241:1234/";
+  //String url = "http://192.168.15.9:1234/"; //Usar esse ip hoje.
   //String url = "https://vieirasistemas.com.br/painel/script/";
   Api();
 
@@ -80,5 +81,49 @@ class Api {
     filial.removeLast();
 
     return filial;
+  }
+
+  buscarProduto() async {
+    var urlRecuperarDadosUsuario = Uri.parse(url + "GrupoProdutosScript.php");
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {},
+    );
+    String retorno = jsonDecode(jsonEncode(response.body));
+    retorno = retorno.replaceAll("}", "}*");
+    retorno = retorno.replaceAll("'", "");
+    List filial = retorno.split("*");
+    filial.removeLast();
+
+    return filial;
+  }
+
+  buscarRelatorioABCProdutos(String dataInicial, String dataFinal,
+      String filial, String radio, String produto) async {
+    var urlRecuperarDadosUsuario =
+        Uri.parse(url + "RelatorioGerencialCurvaABCProdutosScript.php");
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {
+        'dataInicio': '$dataInicial',
+        'dataFim': '$dataFinal',
+        'filial': '$filial',
+        'radiobutton': '$radio',
+        'produto': '$produto'
+      },
+    );
+
+    String retorno = jsonDecode(jsonEncode(response.body));
+
+    retorno = retorno.replaceAll("}", "}/");
+    retorno = retorno.replaceAll("'", "");
+    List relatorio = retorno.split("/");
+
+    relatorio.removeLast();
+    print(relatorio);
+
+    return relatorio;
   }
 }

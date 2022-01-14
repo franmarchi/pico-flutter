@@ -512,7 +512,7 @@ class Tabelas {
             itemBuilder: (context, index) {
               final itemLista = listaDeLista[index];
               return SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
+                  scrollDirection: Axis.horizontal,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -557,23 +557,6 @@ class Tabelas {
               ],
             ))
       ]);
-
-      /*SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(columns: [
-            DataColumn(
-                label: Text("Vendedor (a)",
-                    style: new TextStyle(fontWeight: FontWeight.bold))),
-            DataColumn(
-                label: Text("Produto",
-                    style: new TextStyle(fontWeight: FontWeight.bold))),
-            DataColumn(
-                label: Text("Quantidade",
-                    style: new TextStyle(fontWeight: FontWeight.bold))),
-            DataColumn(
-                label: Text("Total",
-                    style: new TextStyle(fontWeight: FontWeight.bold))),
-          ], rows: list));*/
     }
   }
 }
