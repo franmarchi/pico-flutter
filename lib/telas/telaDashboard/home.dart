@@ -4,6 +4,7 @@ import 'package:pico/telas/telaDashboard/telaRelatorio.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioABCProdutos.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioABCVendedor.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioGerenciais.dart';
+import 'package:pico/telas/telaDashboard/telaVendasDia.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -19,7 +20,8 @@ class _HomeState extends State<Home> {
   List _tela = [
     TelaRelatorio(),
     TelaRelatorioABCProdutos(),
-    TelaRelatorioABCVendedor()
+    TelaRelatorioABCVendedor(),
+    TelaVendasDia()
   ];
 
   @override
@@ -96,19 +98,10 @@ class _HomeState extends State<Home> {
                       },
                     ),
                     ListTile(
-                      title: Text("Grupo produtos"),
-                      onTap: () {
-                        setState(() {
-                          _telaAtual = 1;
-                        });
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
                       title: Text("Venda dia"),
                       onTap: () {
                         setState(() {
-                          _telaAtual = 1;
+                          _telaAtual = 3;
                         });
                         Navigator.pop(context);
                       },
@@ -168,23 +161,12 @@ class _HomeState extends State<Home> {
                             ),
                             ListTile(
                               title: Text(
-                                "Grupo produtos",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  _telaAtual = 0;
-                                });
-                              },
-                            ),
-                            ListTile(
-                              title: Text(
                                 "Venda dia",
                                 style: TextStyle(color: Colors.white),
                               ),
                               onTap: () {
                                 setState(() {
-                                  _telaAtual = 0;
+                                  _telaAtual = 3;
                                 });
                               },
                             ),

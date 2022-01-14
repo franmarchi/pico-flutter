@@ -23,6 +23,9 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
   String _mensagem = "";
   String _opcao = "1";
   Api api = Api();
+  String dropdownValue2 = "";
+  List<Filiais> _vendedor = [];
+  List<String> _nomeVendedor = [];
 
   var maskFormatterDataInic = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
@@ -58,11 +61,32 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
     filiaisRecuperadas = null;
   }
 
+  void _exibirVendedor() async {
+    List listaTemporaria = await api.buscarVendedores();
+
+    List<Filiais>? filiaisRecuperadas = [];
+    List<String>? nomeFiliaisRecuperadas = [];
+    nomeFiliaisRecuperadas.add("");
+    for (var item in listaTemporaria) {
+      item = jsonDecode(item) as Map;
+      var result = item.cast<dynamic, dynamic>();
+      Filiais filiais = Filiais.fromMap(result);
+      filiaisRecuperadas.add(filiais);
+      nomeFiliaisRecuperadas.add(filiais.filial);
+    }
+    setState(() {
+      _vendedor = filiaisRecuperadas!;
+      _nomeVendedor = nomeFiliaisRecuperadas;
+    });
+    filiaisRecuperadas = null;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _exibirFiliais();
+    _exibirVendedor();
     if (dataInicString == "" || dataFinalString == "") {
       dataInicString = dataAtual();
       dataFinalString = dataAtual();
@@ -171,6 +195,43 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
                 ),
                 SizedBox(
                   height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 10,
+                      left: 12,
+                      right: largura > 700 ? largura - 715 - 12 : 12),
+                  child: Row(children: [
+                    Text(
+                      "Vendedores:  ",
+                      style: new TextStyle(fontSize: 15, color: Colors.blue),
+                    ),
+                    DropdownButton<String>(
+                      value: dropdownValue2,
+                      icon: const Icon(Icons.arrow_downward),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.blue,
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dataInicString = _controllerDataInic.text;
+                          dataFinalString = _controllerDataFinal.text;
+                          dropdownValue2 = newValue!;
+                        });
+                      },
+                      items: _nomeVendedor
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ]),
                 ),
                 SizedBox(
                   height: 20,

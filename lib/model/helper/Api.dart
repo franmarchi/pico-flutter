@@ -99,6 +99,22 @@ class Api {
     return filial;
   }
 
+  buscarVendedores() async {
+    var urlRecuperarDadosUsuario = Uri.parse(url + "VendedoresScript.php");
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {},
+    );
+    String retorno = jsonDecode(jsonEncode(response.body));
+    retorno = retorno.replaceAll("}", "}*");
+    retorno = retorno.replaceAll("'", "");
+    List filial = retorno.split("*");
+    filial.removeLast();
+
+    return filial;
+  }
+
   buscarRelatorioABCProdutos(String dataInicial, String dataFinal,
       String filial, String radio, String produto) async {
     var urlRecuperarDadosUsuario =
