@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:pico/model/entities/Filiais.dart';
+import 'package:pico/model/entities/VendaDia.dart';
 import 'dart:convert';
 import 'package:pico/model/helper/Api.dart';
 
@@ -26,6 +27,9 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
   String dropdownValue2 = "";
   List<Filiais> _vendedor = [];
   List<String> _nomeVendedor = [];
+  List _relatorio = [];
+  double _quantidade = 0;
+  double _valorTotal = 0;
 
   var maskFormatterDataInic = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
@@ -39,6 +43,97 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
     final String _formatted = _formatter.format(_now);
 
     return _formatted;
+  }
+
+  _formatarData(String dataString) {
+    List dataFormatada = dataString.split("/");
+    String ano = dataFormatada[2];
+    String mes = dataFormatada[1];
+    String dia = dataFormatada[0];
+
+    String _data = ano + "-" + mes + "-" + dia;
+
+    return _data;
+  }
+
+  void _exibirRelatorio() async {
+    String _dataInicial = _formatarData(_controllerDataInic.text);
+    String _dataFinal = _formatarData(_controllerDataFinal.text);
+    dataInicString = _controllerDataInic.text;
+    dataFinalString = _controllerDataFinal.text;
+    String filialEscolhida = "";
+    String vendedorEscolhido = "";
+    if (dropdownValue != "") {
+      for (var item in _filiais) {
+        if (item.filial == dropdownValue) {
+          filialEscolhida = item.codigo;
+        }
+      }
+    }
+    if (dropdownValue2 != "") {
+      for (var item in _vendedor) {
+        if (item.filial == dropdownValue2) {
+          vendedorEscolhido = item.codigo;
+        }
+      }
+    }
+
+    List listaTemporaria = await api.buscarRelatorioVendaDia(
+        _dataInicial, _dataFinal, filialEscolhida, vendedorEscolhido);
+
+    List? relatorioRecuperado = [];
+
+    if (listaTemporaria.length == 0) {
+      setState(() {
+        _mensagem = "Não há dados para o período selecionado!";
+      });
+    }
+    for (var item in listaTemporaria) {
+      item = jsonDecode(item) as Map;
+      var result = item.cast<dynamic, dynamic>();
+      VendaDia vendaDia = VendaDia.fromMap(result);
+      _quantidade = _quantidade + vendaDia.bruto;
+      _valorTotal = _valorTotal + vendaDia.total;
+      relatorioRecuperado.add(vendaDia);
+    }
+    setState(() {
+      _relatorio = relatorioRecuperado!;
+    });
+
+    relatorioRecuperado = null;
+  }
+
+  _criarTabela(relatorio) {
+    List<DataRow> list = [];
+
+    for (var item in relatorio) {
+      list.add(DataRow(cells: [
+        DataCell(Text(item.data)),
+        DataCell(Text(item.bruto.toStringAsFixed(2))),
+        DataCell(Text(item.desconto.toStringAsFixed(2))),
+        DataCell(Text(item.total.toStringAsFixed(2))),
+      ]));
+    }
+
+    list.add(DataRow(cells: [
+      DataCell(Text("Total geral")),
+      DataCell(Text("${_quantidade.toStringAsFixed(2)}")),
+      DataCell(Text("")),
+      DataCell(Text("${_valorTotal.toStringAsFixed(2)}")),
+    ]));
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        columns: [
+          DataColumn(label: Text("Data")),
+          DataColumn(label: Text("Bruto")),
+          DataColumn(label: Text("Desconto")),
+          DataColumn(label: Text("Liquido"))
+        ],
+        rows: list,
+      ),
+    );
   }
 
   void _exibirFiliais() async {
@@ -243,11 +338,14 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
                         "Pesquisar",
                         style: TextStyle(fontSize: 17),
                       ),
-                      onPressed: () {}),
+                      onPressed: _exibirRelatorio),
                 ),
                 SizedBox(
                   height: 30,
                 ),
+                _relatorio.length > 0
+                    ? _criarTabela(_relatorio)
+                    : Text("$_mensagem")
               ],
             ),
           ),

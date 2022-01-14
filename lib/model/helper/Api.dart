@@ -168,4 +168,30 @@ class Api {
 
     return relatorio;
   }
+
+  buscarRelatorioVendaDia(String dataInicial, String dataFinal, String filial,
+      String vendedor) async {
+    var urlRecuperarDadosUsuario =
+        Uri.parse(url + "RelatorioGerencialVendaDiaScript.php");
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {
+        'dataInicio': '$dataInicial',
+        'dataFim': '$dataFinal',
+        'filial': '$filial',
+        'vendedor': '$vendedor',
+      },
+    );
+
+    String retorno = jsonDecode(jsonEncode(response.body));
+
+    retorno = retorno.replaceAll("}", "}/");
+    retorno = retorno.replaceAll("'", "");
+    List relatorio = retorno.split("/");
+
+    relatorio.removeLast();
+
+    return relatorio;
+  }
 }
