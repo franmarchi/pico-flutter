@@ -2,9 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Api {
-  String url = "http://192.168.0.241:1234/";
-  //String url = "http://192.168.15.9:1234/"; //Usar esse ip hoje.
-  //String url = "https://vieirasistemas.com.br/painel/script/";
+  //String url = "http://192.168.0.241:1234/";
+  String url = "https://vieirasistemas.com.br/painel/script/";
   Api();
 
   Future<Map> verificarUsuario(String email) async {

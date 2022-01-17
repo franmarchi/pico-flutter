@@ -79,32 +79,37 @@ class _HomeState extends State<Home> {
                         Navigator.pop(context);
                       },
                     ),
-                    ListTile(
-                      title: Text("Relatorio G. curva ABC Produtos"),
-                      onTap: () {
-                        setState(() {
-                          _telaAtual = 1;
-                        });
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text("Relatorio G. curva ABC Venda"),
-                      onTap: () {
-                        setState(() {
-                          _telaAtual = 2;
-                        });
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text("Venda dia"),
-                      onTap: () {
-                        setState(() {
-                          _telaAtual = 3;
-                        });
-                        Navigator.pop(context);
-                      },
+                    ExpansionTile(
+                      title: Text("Relatorio gerenciais"),
+                      children: [
+                        ListTile(
+                          title: Text("Curva ABC Produtos"),
+                          onTap: () {
+                            setState(() {
+                              _telaAtual = 1;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ListTile(
+                          title: Text("Curva ABC Vendedores/Filial"),
+                          onTap: () {
+                            setState(() {
+                              _telaAtual = 2;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ListTile(
+                          title: Text("Vendas por dia"),
+                          onTap: () {
+                            setState(() {
+                              _telaAtual = 3;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -126,49 +131,88 @@ class _HomeState extends State<Home> {
                       ? ListView(
                           children: [
                             ListTile(),
-                            ListTile(
-                              title: Text(
-                                "Relatorio Filiais",
-                                style: TextStyle(color: Colors.white),
+                            Container(
+                              color: _telaAtual == 0 ? Colors.white : null,
+                              child: ListTile(
+                                title: Text(
+                                  "Relatorio Filiais",
+                                  style: TextStyle(
+                                      color: _telaAtual == 0
+                                          ? Colors.blue
+                                          : Colors.white),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    _telaAtual = 0;
+                                  });
+                                },
                               ),
-                              onTap: () {
-                                setState(() {
-                                  _telaAtual = 0;
-                                });
-                              },
                             ),
-                            ListTile(
-                              title: Text(
-                                "Relatorio G. curva ABC Produtos",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  _telaAtual = 1;
-                                });
-                              },
-                            ),
-                            ListTile(
-                              title: Text(
-                                "Relatorio G. curva ABC Venda",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  _telaAtual = 2;
-                                });
-                              },
-                            ),
-                            ListTile(
-                              title: Text(
-                                "Venda dia",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  _telaAtual = 3;
-                                });
-                              },
+                            ExpansionTile(
+                              title: Text("Relatorio gerencial",
+                                  style: TextStyle(color: Colors.white)),
+                              children: [
+                                Container(
+                                  color: _telaAtual == 1 ? Colors.white : null,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ListTile(
+                                      title: Text(
+                                        "Curva ABC Produtos",
+                                        style: TextStyle(
+                                            color: _telaAtual == 1
+                                                ? Colors.blue
+                                                : Colors.white),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          _telaAtual = 1;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  color: _telaAtual == 2 ? Colors.white : null,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ListTile(
+                                      title: Text(
+                                        "Curva ABC Venda Filiais",
+                                        style: TextStyle(
+                                            color: _telaAtual == 2
+                                                ? Colors.blue
+                                                : Colors.white),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          _telaAtual = 2;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  color: _telaAtual == 3 ? Colors.white : null,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ListTile(
+                                      title: Text(
+                                        "Venda dia",
+                                        style: TextStyle(
+                                            color: _telaAtual == 3
+                                                ? Colors.blue
+                                                : Colors.white),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          _telaAtual = 3;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         )

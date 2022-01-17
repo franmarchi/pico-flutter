@@ -94,6 +94,8 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
     dataFinalString = _controllerDataFinal.text;
     String filialEscolhida = "";
     String produtoEscolhido = "";
+    _quantidade = 0;
+    _valorTotal = 0;
     if (dropdownValue != "") {
       for (var item in _filiais) {
         if (item.filial == dropdownValue) {
@@ -160,11 +162,14 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
     }
 
     list.add(DataRow(cells: [
-      DataCell(Text("Total geral")),
+      DataCell(
+          Text("Total geral", style: TextStyle(fontWeight: FontWeight.bold))),
       DataCell(Text("")),
-      DataCell(Text("$_quantidade")),
+      DataCell(
+          Text("$_quantidade", style: TextStyle(fontWeight: FontWeight.bold))),
       DataCell(Text("")),
-      DataCell(Text("${_valorTotal.toStringAsFixed(2)}")),
+      DataCell(Text("R\$ " + "${_valorTotal.toStringAsFixed(2)}",
+          style: TextStyle(fontWeight: FontWeight.bold))),
       DataCell(Text("")),
     ]));
 
@@ -172,12 +177,24 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
       scrollDirection: Axis.horizontal,
       child: DataTable(
         columns: [
-          DataColumn(label: Text("Nome do Produto")),
-          DataColumn(label: Text("UND")),
-          DataColumn(label: Text("QTD")),
-          DataColumn(label: Text("Preço Médio")),
-          DataColumn(label: Text("Valor Total")),
-          DataColumn(label: Text("Lucro")),
+          DataColumn(
+              label: Text("Nome do Produto",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label:
+                  Text("UND", style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label:
+                  Text("QTD", style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text("Preço Médio",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text("Valor Total",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label:
+                  Text("Lucro", style: TextStyle(fontWeight: FontWeight.bold))),
         ],
         rows: list,
       ),

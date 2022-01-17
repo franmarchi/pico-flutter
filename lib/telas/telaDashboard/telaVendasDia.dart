@@ -63,6 +63,8 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
     dataFinalString = _controllerDataFinal.text;
     String filialEscolhida = "";
     String vendedorEscolhido = "";
+    _quantidade = 0;
+    _valorTotal = 0;
     if (dropdownValue != "") {
       for (var item in _filiais) {
         if (item.filial == dropdownValue) {
@@ -116,20 +118,31 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
     }
 
     list.add(DataRow(cells: [
-      DataCell(Text("Total geral")),
-      DataCell(Text("${_quantidade.toStringAsFixed(2)}")),
+      DataCell(
+          Text("Total geral", style: TextStyle(fontWeight: FontWeight.bold))),
+      DataCell(Text("R\$ " + "${_quantidade.toStringAsFixed(2)}",
+          style: TextStyle(fontWeight: FontWeight.bold))),
       DataCell(Text("")),
-      DataCell(Text("${_valorTotal.toStringAsFixed(2)}")),
+      DataCell(Text("R\$ " + "${_valorTotal.toStringAsFixed(2)}",
+          style: TextStyle(fontWeight: FontWeight.bold))),
     ]));
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
         columns: [
-          DataColumn(label: Text("Data")),
-          DataColumn(label: Text("Bruto")),
-          DataColumn(label: Text("Desconto")),
-          DataColumn(label: Text("Liquido"))
+          DataColumn(
+              label:
+                  Text("Data", style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label:
+                  Text("Bruto", style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text("Desconto",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text("Líquido",
+                  style: TextStyle(fontWeight: FontWeight.bold)))
         ],
         rows: list,
       ),
@@ -181,6 +194,7 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
     // TODO: implement initState
     super.initState();
     _exibirFiliais();
+
     _exibirVendedor();
     if (dataInicString == "" || dataFinalString == "") {
       dataInicString = dataAtual();
@@ -298,7 +312,7 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
                       right: largura > 700 ? largura - 715 - 12 : 12),
                   child: Row(children: [
                     Text(
-                      "Vendedores:  ",
+                      "Vendedor(a):  ",
                       style: new TextStyle(fontSize: 15, color: Colors.blue),
                     ),
                     DropdownButton<String>(

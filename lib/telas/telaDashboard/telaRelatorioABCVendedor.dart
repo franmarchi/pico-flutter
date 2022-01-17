@@ -80,6 +80,9 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
     String _dataFinal = _formatarData(_controllerDataFinal.text);
     dataInicString = _controllerDataInic.text;
     dataFinalString = _controllerDataFinal.text;
+    _subtotal = 0;
+    _desconto = 0;
+    _total = 0;
     String filialEscolhida = "";
     String produtoEscolhido = "";
     if (dropdownValue != "") {
@@ -129,22 +132,36 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
     }
 
     list.add(DataRow(cells: [
-      DataCell(Text("Total geral")),
-      DataCell(Text("${_subtotal.toStringAsFixed(2)}")),
-      DataCell(Text("${_desconto.toStringAsFixed(2)}")),
+      DataCell(
+          Text("Total geral", style: TextStyle(fontWeight: FontWeight.bold))),
+      DataCell(Text("R\$ " + "${_subtotal.toStringAsFixed(2)}",
+          style: TextStyle(fontWeight: FontWeight.bold))),
+      DataCell(Text("R\$ " + "${_desconto.toStringAsFixed(2)}",
+          style: TextStyle(fontWeight: FontWeight.bold))),
       DataCell(Text("")),
-      DataCell(Text("${_total.toStringAsFixed(2)}")),
+      DataCell(Text("R\$ " + "${_total.toStringAsFixed(2)}",
+          style: TextStyle(fontWeight: FontWeight.bold))),
     ]));
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
         columns: [
-          DataColumn(label: Text("Vendedor (a)")),
-          DataColumn(label: Text("Vlr. Bruto")),
-          DataColumn(label: Text("Desconto R\$")),
-          DataColumn(label: Text("(%)")),
-          DataColumn(label: Text("Vlr. Liquido")),
+          DataColumn(
+              label: Text("Vendedor (a)",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text("Vlr. Bruto",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text("Desconto R\$",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label:
+                  Text("(%)", style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text("Vlr. Liquido",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
         ],
         rows: list,
       ),
