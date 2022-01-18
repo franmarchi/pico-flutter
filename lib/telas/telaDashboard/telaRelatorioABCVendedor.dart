@@ -289,6 +289,8 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
+                            dataInicString = _controllerDataInic.text;
+                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),
@@ -301,6 +303,8 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
+                            dataInicString = _controllerDataInic.text;
+                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),

@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     ListTile(
-                      title: Text("Relatorio Filiais"),
+                      title: Text("Fechamento de vendas"),
                       onTap: () {
                         setState(() {
                           _telaAtual = 0;
@@ -80,10 +80,10 @@ class _HomeState extends State<Home> {
                       },
                     ),
                     ExpansionTile(
-                      title: Text("Relatorio gerenciais"),
+                      title: Text("Relatórios gerenciais"),
                       children: [
                         ListTile(
-                          title: Text("Curva ABC Produtos"),
+                          title: Text("Curva ABC - Produtos"),
                           onTap: () {
                             setState(() {
                               _telaAtual = 1;
@@ -92,7 +92,7 @@ class _HomeState extends State<Home> {
                           },
                         ),
                         ListTile(
-                          title: Text("Curva ABC Vendedores/Filial"),
+                          title: Text("Curva ABC - Filial/Vendedores"),
                           onTap: () {
                             setState(() {
                               _telaAtual = 2;
@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
                               color: _telaAtual == 0 ? Colors.white : null,
                               child: ListTile(
                                 title: Text(
-                                  "Relatorio Filiais",
+                                  "Fechamento de Vendas",
                                   style: TextStyle(
                                       color: _telaAtual == 0
                                           ? Colors.blue
@@ -149,7 +149,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             ExpansionTile(
-                              title: Text("Relatorio gerencial",
+                              title: Text("Relatório Gerencial",
                                   style: TextStyle(color: Colors.white)),
                               children: [
                                 Container(
@@ -158,7 +158,7 @@ class _HomeState extends State<Home> {
                                     padding: EdgeInsets.only(left: 10),
                                     child: ListTile(
                                       title: Text(
-                                        "Curva ABC Produtos",
+                                        "Curva ABC - Produtos",
                                         style: TextStyle(
                                             color: _telaAtual == 1
                                                 ? Colors.blue
@@ -178,7 +178,7 @@ class _HomeState extends State<Home> {
                                     padding: EdgeInsets.only(left: 10),
                                     child: ListTile(
                                       title: Text(
-                                        "Curva ABC Venda Filiais",
+                                        "Curva ABC - Vendedores/Filiais",
                                         style: TextStyle(
                                             color: _telaAtual == 2
                                                 ? Colors.blue
@@ -198,7 +198,7 @@ class _HomeState extends State<Home> {
                                     padding: EdgeInsets.only(left: 10),
                                     child: ListTile(
                                       title: Text(
-                                        "Venda dia",
+                                        "Vendas por dia",
                                         style: TextStyle(
                                             color: _telaAtual == 3
                                                 ? Colors.blue

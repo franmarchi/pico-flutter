@@ -90,8 +90,10 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
   void _exibirRelatorio() async {
     String _dataInicial = _formatarData(_controllerDataInic.text);
     String _dataFinal = _formatarData(_controllerDataFinal.text);
+
     dataInicString = _controllerDataInic.text;
     dataFinalString = _controllerDataFinal.text;
+
     String filialEscolhida = "";
     String produtoEscolhido = "";
     _quantidade = 0;
@@ -365,6 +367,8 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
+                            dataInicString = _controllerDataInic.text;
+                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),
@@ -378,6 +382,8 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
+                            dataInicString = _controllerDataInic.text;
+                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),
@@ -391,6 +397,8 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
+                            dataInicString = _controllerDataInic.text;
+                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),

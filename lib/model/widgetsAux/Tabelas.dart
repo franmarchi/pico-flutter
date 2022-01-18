@@ -1,6 +1,3 @@
-import 'dart:js';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pico/model/entities/ItensVendidoVendedor.dart';
 

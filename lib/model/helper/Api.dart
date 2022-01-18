@@ -163,7 +163,7 @@ class Api {
     List relatorio = retorno.split("/");
 
     relatorio.removeLast();
-    print(relatorio);
+    //print(relatorio);
 
     return relatorio;
   }
