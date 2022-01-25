@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pico/telas/telaDashboard/TelaRelatorioResumoVendas.dart';
 import 'package:pico/telas/telaDashboard/appbarMobile.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorio.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioABCProdutos.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioABCVendedor.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioGerenciais.dart';
 import 'package:pico/telas/telaDashboard/telaVendasDia.dart';
+import 'package:pico/telas/telasLogin/telaVerificarEmail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -21,7 +24,9 @@ class _HomeState extends State<Home> {
     TelaRelatorio(),
     TelaRelatorioABCProdutos(),
     TelaRelatorioABCVendedor(),
-    TelaVendasDia()
+    TelaVendasDia(),
+    TelaRelatorioResumoVendas(),
+    TelaVerificarEmail(),
   ];
 
   @override
@@ -109,7 +114,31 @@ class _HomeState extends State<Home> {
                             Navigator.pop(context);
                           },
                         ),
+                        /* ListTile(
+                          title: Text("Resumo de Vendas"),
+                          onTap: () {
+                            setState(() {
+                              _telaAtual = 4;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),*/
                       ],
+                    ),
+                    ListTile(
+                      title: Text("Desconectar"),
+                      onTap: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.remove("login");
+                        prefs.remove("senha");
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  TelaVerificarEmail(),
+                            ),
+                            (route) => false);
+                      },
                     ),
                   ],
                 ),
@@ -212,7 +241,55 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                 ),
+                                /* Container(
+                                  color: _telaAtual == 4 ? Colors.white : null,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ListTile(
+                                      title: Text(
+                                        "Resumo de Vendas",
+                                        style: TextStyle(
+                                            color: _telaAtual == 4
+                                                ? Colors.blue
+                                                : Colors.white),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          _telaAtual = 4;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),*/
                               ],
+                            ),
+                            Container(
+                              color: _telaAtual == 5 ? Colors.white : null,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: ListTile(
+                                  title: Text(
+                                    "Desconectar",
+                                    style: TextStyle(
+                                        color: _telaAtual == 5
+                                            ? Colors.blue
+                                            : Colors.white),
+                                  ),
+                                  onTap: () async {
+                                    final prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.remove("login");
+                                    prefs.remove("senha");
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              TelaVerificarEmail(),
+                                        ),
+                                        (route) => false);
+                                  },
+                                ),
+                              ),
                             ),
                           ],
                         )

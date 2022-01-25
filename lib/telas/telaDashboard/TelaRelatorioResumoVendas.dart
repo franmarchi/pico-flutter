@@ -6,14 +6,15 @@ import 'package:pico/model/entities/VendaDia.dart';
 import 'dart:convert';
 import 'package:pico/model/helper/Api.dart';
 
-class TelaVendasDia extends StatefulWidget {
-  const TelaVendasDia({Key? key}) : super(key: key);
+class TelaRelatorioResumoVendas extends StatefulWidget {
+  const TelaRelatorioResumoVendas({Key? key}) : super(key: key);
 
   @override
-  _TelaVendasDiaState createState() => _TelaVendasDiaState();
+  _TelaRelatorioResumoVendasState createState() =>
+      _TelaRelatorioResumoVendasState();
 }
 
-class _TelaVendasDiaState extends State<TelaVendasDia> {
+class _TelaRelatorioResumoVendasState extends State<TelaRelatorioResumoVendas> {
   TextEditingController _controllerDataInic = TextEditingController();
   TextEditingController _controllerDataFinal = TextEditingController();
   //String dataInicString = "";
@@ -25,7 +26,7 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
   String _opcao = "1";
   Api api = Api();
   String dropdownValue2 = "";
-  List<Filiais> _vendedor = [];
+  //List<Filiais> _vendedor = [];
   List<String> _nomeVendedor = [];
   List _relatorio = [];
   double _quantidade = 0;
@@ -72,16 +73,9 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
         }
       }
     }
-    if (dropdownValue2 != "") {
-      for (var item in _vendedor) {
-        if (item.filial == dropdownValue2) {
-          vendedorEscolhido = item.codigo;
-        }
-      }
-    }
 
-    List listaTemporaria = await api.buscarRelatorioVendaDia(
-        _dataInicial, _dataFinal, filialEscolhida, vendedorEscolhido);
+    List listaTemporaria = await api.buscarRelatorioResumoVenda(
+        _dataInicial, _dataFinal, filialEscolhida);
 
     List? relatorioRecuperado = [];
 
@@ -169,37 +163,11 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
     filiaisRecuperadas = null;
   }
 
-  void _exibirVendedor() async {
-    List listaTemporaria = await api.buscarVendedores();
-
-    List<Filiais>? filiaisRecuperadas = [];
-    List<String>? nomeFiliaisRecuperadas = [];
-    nomeFiliaisRecuperadas.add("");
-    for (var item in listaTemporaria) {
-      item = jsonDecode(item) as Map;
-      var result = item.cast<dynamic, dynamic>();
-      Filiais filiais = Filiais.fromMap(result);
-      filiaisRecuperadas.add(filiais);
-      nomeFiliaisRecuperadas.add(filiais.filial);
-    }
-    setState(() {
-      _vendedor = filiaisRecuperadas!;
-      _nomeVendedor = nomeFiliaisRecuperadas;
-    });
-    filiaisRecuperadas = null;
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _exibirFiliais();
-
-    _exibirVendedor();
-    /*  if (dataInicString == "" || dataFinalString == "") {
-      dataInicString = dataAtual();
-      dataFinalString = dataAtual();
-    }*/
   }
 
   @override
@@ -300,41 +268,6 @@ class _TelaVendasDiaState extends State<TelaVendasDia> {
                 ),
                 SizedBox(
                   height: 20,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: 10,
-                      left: 12,
-                      right: largura > 700 ? largura - 715 - 12 : 12),
-                  child: Row(children: [
-                    Text(
-                      "Vendedor(a):  ",
-                      style: new TextStyle(fontSize: 15, color: Colors.blue),
-                    ),
-                    DropdownButton<String>(
-                      value: dropdownValue2,
-                      icon: const Icon(Icons.arrow_downward),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.blue,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue2 = newValue!;
-                        });
-                      },
-                      items: _nomeVendedor
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ]),
                 ),
                 SizedBox(
                   height: 20,

@@ -22,8 +22,6 @@ class TelaRelatorio extends StatefulWidget {
 class _TelaRelatorioState extends State<TelaRelatorio> {
   TextEditingController _controllerDataInic = TextEditingController();
   TextEditingController _controllerDataFinal = TextEditingController();
-  String dataInicString = "";
-  String dataFinalString = "";
   String data1 = "";
   Api api = Api();
   List _relatorio = [];
@@ -56,8 +54,6 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
   void _exibirRelatorio() async {
     String _dataInicial = _formatarData(_controllerDataInic.text);
     String _dataFinal = _formatarData(_controllerDataFinal.text);
-    dataInicString = _controllerDataInic.text;
-    dataFinalString = _controllerDataFinal.text;
     String filialEscolhida = "";
     if (dropdownValue != "") {
       for (var item in _filiais) {
@@ -154,13 +150,20 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
         _relatorio, _bruto, _desconto, _total, urlScriptTabela);
   }
 
-  dataAtual() {
-    var _now = DateTime.now();
-    final DateFormat _formatter = DateFormat('dd/MM/yyyy');
-    final String _formatted = _formatter.format(_now);
-
-    return _formatted;
-  }
+  /*dataAtual() {
+    bool dataInicial = false;
+    bool dataFinal = false;
+    if (dataInicial == false && dataFinal == false) {
+      dataInicial = true;
+      dataFinal = true;
+      var _now = DateTime.now();
+      final DateFormat _formatter = DateFormat('dd/MM/yyyy');
+      final String _formatted = _formatter.format(_now);
+      TextEditingController _controllerDataAtual = TextEditingController();
+      _controllerDataAtual.text = _formatted;
+      return _controllerDataAtual;
+    }
+  }*/
 
   void _exibirFiliais() async {
     List listaTemporaria = await api.buscarFiliais();
@@ -187,10 +190,10 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
     // TODO: implement initState
     super.initState();
     _exibirFiliais();
-    if (dataInicString == "" || dataFinalString == "") {
+    /*if (dataInicString == "" || dataFinalString == "") {
       dataInicString = dataAtual();
       dataFinalString = dataAtual();
-    }
+    }*/
   }
 
   @override
@@ -222,8 +225,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                 decoration:
                                     InputDecoration(labelText: "Data inicial"),
                                 style: TextStyle(fontSize: 15),
-                                controller: _controllerDataInic
-                                  ..text = dataInicString,
+                                controller: _controllerDataInic,
                                 inputFormatters: [maskFormatterDataInic],
                               ),
                             )),
@@ -242,8 +244,7 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                                 decoration:
                                     InputDecoration(labelText: "Data Final"),
                                 style: TextStyle(fontSize: 15),
-                                controller: _controllerDataFinal
-                                  ..text = dataFinalString,
+                                controller: _controllerDataFinal,
                                 inputFormatters: [maskFormatterDataFinal],
                               ),
                             )),
@@ -278,8 +279,6 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                             ),
                             onChanged: (String? newValue) {
                               setState(() {
-                                dataInicString = _controllerDataInic.text;
-                                dataFinalString = _controllerDataFinal.text;
                                 dropdownValue = newValue!;
                               });
                             },
@@ -321,8 +320,6 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
                             ),
                             onChanged: (String? newValue) {
                               setState(() {
-                                dataInicString = _controllerDataInic.text;
-                                dataFinalString = _controllerDataFinal.text;
                                 dropdownValue2 = newValue!;
                               });
                             },

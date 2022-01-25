@@ -17,8 +17,8 @@ class TelaRelatorioABCVendedor extends StatefulWidget {
 class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
   TextEditingController _controllerDataInic = TextEditingController();
   TextEditingController _controllerDataFinal = TextEditingController();
-  String dataInicString = "";
-  String dataFinalString = "";
+  //String dataInicString = "";
+  //String dataFinalString = "";
   List<Filiais> _filiais = [];
   List<String> _nomeFiliais = [];
   String dropdownValue = "";
@@ -36,13 +36,13 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
   var maskFormatterDataFinal = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
-  dataAtual() {
+  /* dataAtual() {
     var _now = DateTime.now();
     final DateFormat _formatter = DateFormat('dd/MM/yyyy');
     final String _formatted = _formatter.format(_now);
 
     return _formatted;
-  }
+  }*/
 
   void _exibirFiliais() async {
     List listaTemporaria = await api.buscarFiliais();
@@ -78,8 +78,8 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
   void _exibirRelatorio() async {
     String _dataInicial = _formatarData(_controllerDataInic.text);
     String _dataFinal = _formatarData(_controllerDataFinal.text);
-    dataInicString = _controllerDataInic.text;
-    dataFinalString = _controllerDataFinal.text;
+    //dataInicString = _controllerDataInic.text;
+    //dataFinalString = _controllerDataFinal.text;
     _subtotal = 0;
     _desconto = 0;
     _total = 0;
@@ -173,10 +173,10 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
     // TODO: implement initState
     super.initState();
     _exibirFiliais();
-    if (dataInicString == "" || dataFinalString == "") {
+    /* if (dataInicString == "" || dataFinalString == "") {
       dataInicString = dataAtual();
       dataFinalString = dataAtual();
-    }
+    }*/
   }
 
   @override
@@ -208,8 +208,7 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
                             decoration:
                                 InputDecoration(labelText: "Data inicial"),
                             style: TextStyle(fontSize: 15),
-                            controller: _controllerDataInic
-                              ..text = dataInicString,
+                            controller: _controllerDataInic,
                             inputFormatters: [maskFormatterDataInic],
                           ),
                         )),
@@ -228,8 +227,7 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
                             decoration:
                                 InputDecoration(labelText: "Data Final"),
                             style: TextStyle(fontSize: 15),
-                            controller: _controllerDataFinal
-                              ..text = dataFinalString,
+                            controller: _controllerDataFinal,
                             inputFormatters: [maskFormatterDataFinal],
                           ),
                         )),
@@ -263,8 +261,6 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
                         ),
                         onChanged: (String? newValue) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             dropdownValue = newValue!;
                           });
                         },
@@ -289,8 +285,6 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),
@@ -303,8 +297,6 @@ class _TelaRelatorioABCVendedorState extends State<TelaRelatorioABCVendedor> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),

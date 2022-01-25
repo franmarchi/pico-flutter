@@ -193,4 +193,31 @@ class Api {
 
     return relatorio;
   }
+
+  buscarRelatorioResumoVenda(
+      String dataInicial, String dataFinal, String filial) async {
+    var urlRecuperarDadosUsuario =
+        Uri.parse(url + "RelatorioGerencialResumoVendasScript.php");
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {
+        'dataInicio': '$dataInicial',
+        'dataFim': '$dataFinal',
+        'filial': '$filial',
+      },
+    );
+
+    String retorno = jsonDecode(jsonEncode(response.body));
+
+    print(retorno.toString());
+
+    retorno = retorno.replaceAll("}", "}/");
+    retorno = retorno.replaceAll("'", "");
+    List relatorio = retorno.split("/");
+
+    relatorio.removeLast();
+
+    return relatorio;
+  }
 }

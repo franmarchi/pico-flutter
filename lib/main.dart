@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pico/telas/telaDashboard/home.dart';
 import 'package:pico/telas/telasLogin/telaVerificarEmail.dart';
 
 /*class MyHttpOverrides extends HttpOverrides {
@@ -12,6 +13,7 @@ import 'package:pico/telas/telasLogin/telaVerificarEmail.dart';
 
 void main() {
   runApp(MaterialApp(
+    //home: Home(),
     home: TelaVerificarEmail(),
     debugShowCheckedModeBanner: false,
   ));

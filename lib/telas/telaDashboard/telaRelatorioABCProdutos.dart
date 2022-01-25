@@ -17,8 +17,8 @@ class TelaRelatorioABCProdutos extends StatefulWidget {
 class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
   TextEditingController _controllerDataInic = TextEditingController();
   TextEditingController _controllerDataFinal = TextEditingController();
-  String dataInicString = "";
-  String dataFinalString = "";
+  //String dataInicString = "";
+  //String dataFinalString = "";
   List<Filiais> _filiais = [];
   List<String> _nomeFiliais = [];
   String dropdownValue = "";
@@ -39,13 +39,13 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
   var maskFormatterDataFinal = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
-  dataAtual() {
+  /* dataAtual() {
     var _now = DateTime.now();
     final DateFormat _formatter = DateFormat('dd/MM/yyyy');
     final String _formatted = _formatter.format(_now);
 
     return _formatted;
-  }
+  }*/
 
   void _exibirFiliais() async {
     List listaTemporaria = await api.buscarFiliais();
@@ -91,8 +91,8 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
     String _dataInicial = _formatarData(_controllerDataInic.text);
     String _dataFinal = _formatarData(_controllerDataFinal.text);
 
-    dataInicString = _controllerDataInic.text;
-    dataFinalString = _controllerDataFinal.text;
+    //dataInicString = _controllerDataInic.text;
+    //dataFinalString = _controllerDataFinal.text;
 
     String filialEscolhida = "";
     String produtoEscolhido = "";
@@ -209,10 +209,10 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
     super.initState();
     _exibirFiliais();
     _exibirProduto();
-    if (dataInicString == "" || dataFinalString == "") {
+    /*if (dataInicString == "" || dataFinalString == "") {
       dataInicString = dataAtual();
       dataFinalString = dataAtual();
-    }
+    }*/
   }
 
   @override
@@ -244,8 +244,7 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                             decoration:
                                 InputDecoration(labelText: "Data inicial"),
                             style: TextStyle(fontSize: 15),
-                            controller: _controllerDataInic
-                              ..text = dataInicString,
+                            controller: _controllerDataInic,
                             inputFormatters: [maskFormatterDataInic],
                           ),
                         )),
@@ -264,8 +263,7 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                             decoration:
                                 InputDecoration(labelText: "Data Final"),
                             style: TextStyle(fontSize: 15),
-                            controller: _controllerDataFinal
-                              ..text = dataFinalString,
+                            controller: _controllerDataFinal,
                             inputFormatters: [maskFormatterDataFinal],
                           ),
                         )),
@@ -299,8 +297,6 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         ),
                         onChanged: (String? newValue) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             dropdownValue = newValue!;
                           });
                         },
@@ -341,8 +337,6 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         ),
                         onChanged: (String? newValue) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             dropdownValue2 = newValue!;
                           });
                         },
@@ -367,8 +361,6 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),
@@ -382,8 +374,6 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),
@@ -397,8 +387,6 @@ class _TelaRelatorioABCProdutosState extends State<TelaRelatorioABCProdutos> {
                         groupValue: _opcao,
                         onChanged: (String? escolha) {
                           setState(() {
-                            dataInicString = _controllerDataInic.text;
-                            dataFinalString = _controllerDataFinal.text;
                             _opcao = escolha!;
                           });
                         }),
