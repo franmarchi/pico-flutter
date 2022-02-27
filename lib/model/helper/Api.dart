@@ -217,6 +217,42 @@ class Api {
     List relatorio = retorno.split("/");
 
     relatorio.removeLast();
+    print(relatorio);
+
+    return relatorio;
+  }
+
+  enviarEmail(String email, String codigo) async {
+    var urlRecuperarDadosUsuario = Uri.parse(url + "index.php");
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {'txtEmail': '${email.toLowerCase()}', 'txtCod': '$codigo'},
+    );
+    String retorno = jsonDecode(jsonEncode(response.body));
+    //print("Retorno mensagem: " + retorno);
+  }
+
+  buscarRelatorioGraficoPorAno(String ano, String filial) async {
+    var urlRecuperarDadosUsuario =
+        Uri.parse(url + "RelatorioGerencialGraficoVendasporAnoScript.php");
+
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {
+        'ano': '$ano',
+        'filial': '$filial',
+      },
+    );
+
+    String retorno = jsonDecode(jsonEncode(response.body));
+
+    retorno = retorno.replaceAll("}", "}/");
+    retorno = retorno.replaceAll("'", "");
+    List relatorio = retorno.split("/");
+
+    relatorio.removeLast();
 
     return relatorio;
   }

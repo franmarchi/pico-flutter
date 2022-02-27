@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pico/model/helper/Api.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-
-import 'package:pico/telas/telasLogin/telaLogin.dart';
 import 'package:pico/telas/telasLogin/telaVerificarEmail.dart';
 
 class TelaAtualizarSenha1 extends StatefulWidget {
@@ -58,7 +56,82 @@ class _TelaAtualizarSenha1State extends State<TelaAtualizarSenha1> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return LayoutBuilder(builder: (context, constraint) {
+      var largura = constraint.maxWidth;
+      var alturaBarra = AppBar().preferredSize.height;
+      return Scaffold(
+          backgroundColor: largura > 700 ? Colors.blue : Colors.white,
+          appBar: largura > 700
+              ? null
+              : AppBar(
+                  iconTheme: IconThemeData(color: Colors.white),
+                  title: Text("Pico"),
+                ),
+          body: Center(
+              child: Padding(
+            padding: EdgeInsets.only(top: 50, bottom: 50),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Container(
+                  padding: EdgeInsets.all(50),
+                  width: largura > 700 ? 500 : double.maxFinite,
+                  height: double.maxFinite,
+                  color: Colors.white,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Text("${widget.retorno["email"]}",
+                              style: TextStyle(fontSize: 20)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(_mensagemErro,
+                              style: TextStyle(color: Colors.red)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: TextField(
+                            keyboardType: TextInputType.name,
+                            decoration:
+                                InputDecoration(labelText: "Crie uma Senha"),
+                            style: TextStyle(fontSize: 15),
+                            controller: _controllerSenha,
+                            obscureText: true,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: TextField(
+                            keyboardType: TextInputType.name,
+                            decoration:
+                                InputDecoration(labelText: "Confirmar senha"),
+                            style: TextStyle(fontSize: 15),
+                            controller: _controllerConfSenha,
+                            obscureText: true,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: ElevatedButton(
+                            child: Text(
+                              "Atualizar",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            onPressed: _atualizarSenha,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            ),
+          )));
+    });
+    /*return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Pico"),
@@ -118,6 +191,6 @@ class _TelaAtualizarSenha1State extends State<TelaAtualizarSenha1> {
           ),
         ),
       ),
-    );
+    );*/
   }
 }

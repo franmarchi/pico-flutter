@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:pico/model/helper/Api.dart';
+import 'package:pico/model/helper/MensagensLegais.dart';
 import 'package:pico/telas/telaDashboard/home.dart';
-import 'package:pico/telas/telaDashboard/telaRelatorio.dart';
-import 'package:pico/telas/telasLogin/telaAtualizarSenha1.dart';
+import 'package:pico/telas/telasLogin/telaAtualizarSenha2.dart';
 import 'package:pico/telas/telasLogin/telaVerificarEmail.dart';
-import 'package:pico/model/entities/Filiais.dart';
 
 class TelaLogin extends StatefulWidget {
   Map<dynamic, dynamic> retorno;
@@ -20,6 +19,16 @@ class _TelaLoginState extends State<TelaLogin> {
   TextEditingController _controllerSenha = TextEditingController();
   String _mensagemErro = "";
   Api api = Api();
+
+  MensagensLegais mensagensLegais = MensagensLegais();
+
+  exibirMensagemTermosdeUso() {
+    mensagensLegais.exibirTermosdeUso(context);
+  }
+
+  exibirMensagemPoliticaPrivacidade() {
+    mensagensLegais.exibirPoliticaPrivacidade(context);
+  }
 
   _verificarLogin() {
     String _email = widget.retorno["email"];
@@ -131,6 +140,51 @@ class _TelaLoginState extends State<TelaLogin> {
                                 ),
                               ],
                             )),
+                        Padding(
+                          padding: EdgeInsets.only(top: 35),
+                          child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TelaAtualizarSenha2(
+                                                widget.retorno["email"])));
+                              },
+                              child: Text("Esqueceu sua senha",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.blue))),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: [
+                              Text(
+                                  "Ao clicar em próximo, você concorda com a nossa "),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: exibirMensagemPoliticaPrivacidade,
+                                    child: Text(
+                                      "Politica de Privacidade",
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                  Text(" e com nossos "),
+                                  GestureDetector(
+                                    onTap: exibirMensagemTermosdeUso,
+                                    child: Text(
+                                      "Termos de Uso",
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   )),

@@ -5,7 +5,6 @@ import 'package:pico/model/entities/ItensBonificados.dart';
 import 'package:pico/model/entities/ItensVendidoVendedor.dart';
 import 'package:pico/model/entities/Relatorio.dart';
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:pico/model/entities/RelatorioVendasCanceladas.dart';
 import 'package:pico/model/entities/RelatorioVendasCredito.dart';
 import 'package:pico/model/entities/RelatorioVendasDetalhadas.dart';

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pico/model/helper/MensagensLegais.dart';
 import 'package:pico/telas/telaDashboard/TelaRelatorioResumoVendas.dart';
 import 'package:pico/telas/telaDashboard/appbarMobile.dart';
+import 'package:pico/telas/telaDashboard/telaGraficoVendasPorAno.dart';
+import 'package:pico/telas/telaDashboard/telaGraficoVendasPorFilial.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorio.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioABCProdutos.dart';
 import 'package:pico/telas/telaDashboard/telaRelatorioABCVendedor.dart';
-import 'package:pico/telas/telaDashboard/telaRelatorioGerenciais.dart';
 import 'package:pico/telas/telaDashboard/telaVendasDia.dart';
 import 'package:pico/telas/telasLogin/telaVerificarEmail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -26,8 +27,19 @@ class _HomeState extends State<Home> {
     TelaRelatorioABCVendedor(),
     TelaVendasDia(),
     TelaRelatorioResumoVendas(),
-    TelaVerificarEmail(),
+    TelaGraficoVendasPorAno(),
+    TelaGraficoVendasPorFilial()
   ];
+
+  MensagensLegais mensagensLegais = MensagensLegais();
+
+  exibirMensagemTermosdeUso() {
+    mensagensLegais.exibirTermosdeUso(context);
+  }
+
+  exibirMensagemPoliticaPrivacidade() {
+    mensagensLegais.exibirPoliticaPrivacidade(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,32 +126,68 @@ class _HomeState extends State<Home> {
                             Navigator.pop(context);
                           },
                         ),
-                        /* ListTile(
-                          title: Text("Resumo de Vendas"),
+                        ListTile(
+                          title: Text("Resumo de vendas"),
                           onTap: () {
                             setState(() {
                               _telaAtual = 4;
                             });
                             Navigator.pop(context);
                           },
-                        ),*/
+                        ),
                       ],
                     ),
                     ListTile(
-                      title: Text("Desconectar"),
-                      onTap: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        prefs.remove("login");
-                        prefs.remove("senha");
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  TelaVerificarEmail(),
-                            ),
-                            (route) => false);
+                      title: Text("Grafico - Vendas por ano"),
+                      onTap: () {
+                        setState(() {
+                          _telaAtual = 5;
+                        });
+                        Navigator.pop(context);
                       },
                     ),
+                    ListTile(
+                      title: Text("Grafico - Vendas por Filial"),
+                      onTap: () {
+                        setState(() {
+                          _telaAtual = 6;
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(),
+                    ListTile(
+                      leading: Icon(
+                        Icons.info_outline,
+                      ),
+                      title: Text("Termos de uso",
+                          style: TextStyle(color: Colors.white)),
+                      onTap: () {
+                        exibirMensagemTermosdeUso();
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.info_outline,
+                      ),
+                      title: Text("Politica de privacidade",
+                          style: TextStyle(color: Colors.white)),
+                      onTap: () {
+                        exibirMensagemPoliticaPrivacidade();
+                      },
+                    ),
+                    ListTile(
+                        leading: Icon(Icons.logout),
+                        title: Text("Desconectar"),
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    TelaVerificarEmail(),
+                              ),
+                              (route) => false);
+                        }),
                   ],
                 ),
               )
@@ -241,7 +289,7 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                 ),
-                                /* Container(
+                                Container(
                                   color: _telaAtual == 4 ? Colors.white : null,
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 10),
@@ -260,37 +308,84 @@ class _HomeState extends State<Home> {
                                       },
                                     ),
                                   ),
-                                ),*/
+                                ),
+                                Container(
+                                  color: _telaAtual == 5 ? Colors.white : null,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ListTile(
+                                      title: Text("Gráfico - Vendas por ano",
+                                          style: TextStyle(
+                                              color: _telaAtual == 5
+                                                  ? Colors.blue
+                                                  : Colors.white)),
+                                      onTap: () {
+                                        setState(() {
+                                          _telaAtual = 5;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  color: _telaAtual == 6 ? Colors.white : null,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ListTile(
+                                      title: Text("Gráfico - Vendas por Filial",
+                                          style: TextStyle(
+                                              color: _telaAtual == 6
+                                                  ? Colors.blue
+                                                  : Colors.white)),
+                                      onTap: () {
+                                        setState(() {
+                                          _telaAtual = 6;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
-                            Container(
-                              color: _telaAtual == 5 ? Colors.white : null,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: ListTile(
-                                  title: Text(
-                                    "Desconectar",
-                                    style: TextStyle(
-                                        color: _telaAtual == 5
-                                            ? Colors.blue
-                                            : Colors.white),
-                                  ),
-                                  onTap: () async {
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    prefs.remove("login");
-                                    prefs.remove("senha");
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              TelaVerificarEmail(),
-                                        ),
-                                        (route) => false);
-                                  },
-                                ),
+                            ListTile(),
+                            ListTile(
+                              leading: Icon(
+                                Icons.info_outline,
+                                color: Colors.white,
                               ),
+                              title: Text("Termos de uso",
+                                  style: TextStyle(color: Colors.white)),
+                              onTap: () {
+                                exibirMensagemTermosdeUso();
+                              },
                             ),
+                            ListTile(
+                              leading: Icon(
+                                Icons.info_outline,
+                                color: Colors.white,
+                              ),
+                              title: Text("Politica de privacidade",
+                                  style: TextStyle(color: Colors.white)),
+                              onTap: () {
+                                exibirMensagemPoliticaPrivacidade();
+                              },
+                            ),
+                            ListTile(
+                                leading: Icon(
+                                  Icons.logout,
+                                  color: Colors.white,
+                                ),
+                                title: Text("Desconectar",
+                                    style: TextStyle(color: Colors.white)),
+                                onTap: () {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            TelaVerificarEmail(),
+                                      ),
+                                      (route) => false);
+                                }),
                           ],
                         )
                       : null,

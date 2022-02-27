@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:pico/model/entities/Filiais.dart';
+import 'package:pico/model/entities/ResumoVendas.dart';
 import 'package:pico/model/entities/VendaDia.dart';
 import 'dart:convert';
 import 'package:pico/model/helper/Api.dart';
@@ -23,28 +24,20 @@ class _TelaRelatorioResumoVendasState extends State<TelaRelatorioResumoVendas> {
   List<String> _nomeFiliais = [];
   String dropdownValue = "";
   String _mensagem = "";
-  String _opcao = "1";
+  double _custo = 0;
+  double _valorTotal = 0;
+
   Api api = Api();
   String dropdownValue2 = "";
   //List<Filiais> _vendedor = [];
-  List<String> _nomeVendedor = [];
+
   List _relatorio = [];
-  double _quantidade = 0;
-  double _valorTotal = 0;
 
   var maskFormatterDataInic = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
   var maskFormatterDataFinal = new MaskTextInputFormatter(
       mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
-
-  dataAtual() {
-    var _now = DateTime.now();
-    final DateFormat _formatter = DateFormat('dd/MM/yyyy');
-    final String _formatted = _formatter.format(_now);
-
-    return _formatted;
-  }
 
   _formatarData(String dataString) {
     List dataFormatada = dataString.split("/");
@@ -63,8 +56,7 @@ class _TelaRelatorioResumoVendasState extends State<TelaRelatorioResumoVendas> {
     // dataInicString = _controllerDataInic.text;
     // dataFinalString = _controllerDataFinal.text;
     String filialEscolhida = "";
-    String vendedorEscolhido = "";
-    _quantidade = 0;
+    _custo = 0;
     _valorTotal = 0;
     if (dropdownValue != "") {
       for (var item in _filiais) {
@@ -87,11 +79,12 @@ class _TelaRelatorioResumoVendasState extends State<TelaRelatorioResumoVendas> {
     for (var item in listaTemporaria) {
       item = jsonDecode(item) as Map;
       var result = item.cast<dynamic, dynamic>();
-      VendaDia vendaDia = VendaDia.fromMap(result);
-      _quantidade = _quantidade + vendaDia.bruto;
-      _valorTotal = _valorTotal + vendaDia.total;
-      relatorioRecuperado.add(vendaDia);
+      ResumoVendas resumoVendas = ResumoVendas.fromMap(result);
+      _custo = _custo + resumoVendas.custo;
+      _valorTotal = _valorTotal + resumoVendas.total;
+      relatorioRecuperado.add(resumoVendas);
     }
+    print(relatorioRecuperado);
     setState(() {
       _relatorio = relatorioRecuperado!;
     });
@@ -100,47 +93,114 @@ class _TelaRelatorioResumoVendasState extends State<TelaRelatorioResumoVendas> {
   }
 
   _criarTabela(relatorio) {
-    List<DataRow> list = [];
+    List<List<ResumoVendas>> listaDeLista = [];
+    bool? adicionado;
+    double _totalVendedor = 0.0;
+    double _custoTotal = 0.0;
+    for (var item in _relatorio) {
+      if (listaDeLista.isEmpty) {
+        List<ResumoVendas> list = [item];
+        listaDeLista.add(list);
+      } else {
+        for (var itemLista in listaDeLista) {
+          for (var objitem in itemLista) {
+            if (objitem.apelido == item.apelido) {
+              itemLista.add(item);
+              adicionado = true;
+              break;
+            } else {
+              adicionado = false;
+            }
+          }
+        }
+        if (adicionado == false) {
+          List<ResumoVendas> list = [item];
+          listaDeLista.add(list);
+        }
+      }
+    }
+    criarRows(lista) {
+      List<DataRow> list = [];
+      _totalVendedor = 0;
+      _custoTotal = 0;
 
-    for (var item in relatorio) {
+      for (var item in lista) {
+        _totalVendedor = _totalVendedor + item.total;
+        _custoTotal = _custoTotal + item.custo;
+        list.add(DataRow(cells: [
+          DataCell(Text(item.nome)),
+          DataCell(Text(item.qtd)),
+          DataCell(Text(item.total.toStringAsFixed(2))),
+          DataCell(Text(item.custo.toStringAsFixed(2))),
+        ]));
+      }
       list.add(DataRow(cells: [
-        DataCell(Text(item.data)),
-        DataCell(Text(item.bruto.toStringAsFixed(2))),
-        DataCell(Text(item.desconto.toStringAsFixed(2))),
-        DataCell(Text(item.total.toStringAsFixed(2))),
+        DataCell(Text("Total", style: TextStyle(fontWeight: FontWeight.bold))),
+        DataCell(Text("", style: TextStyle(fontWeight: FontWeight.bold))),
+        DataCell(Text("R\$ " + _totalVendedor.toStringAsFixed(2),
+            style: TextStyle(fontWeight: FontWeight.bold))),
+        DataCell(Text("R\$ " + _custoTotal.toStringAsFixed(2),
+            style: TextStyle(fontWeight: FontWeight.bold))),
       ]));
+      return list;
     }
 
-    list.add(DataRow(cells: [
-      DataCell(
-          Text("Total geral", style: TextStyle(fontWeight: FontWeight.bold))),
-      DataCell(Text("R\$ " + "${_quantidade.toStringAsFixed(2)}",
-          style: TextStyle(fontWeight: FontWeight.bold))),
-      DataCell(Text("")),
-      DataCell(Text("R\$ " + "${_valorTotal.toStringAsFixed(2)}",
-          style: TextStyle(fontWeight: FontWeight.bold))),
-    ]));
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columns: [
-          DataColumn(
-              label:
-                  Text("Data", style: TextStyle(fontWeight: FontWeight.bold))),
-          DataColumn(
-              label:
-                  Text("Bruto", style: TextStyle(fontWeight: FontWeight.bold))),
-          DataColumn(
-              label: Text("Desconto",
-                  style: TextStyle(fontWeight: FontWeight.bold))),
-          DataColumn(
-              label: Text("Líquido",
-                  style: TextStyle(fontWeight: FontWeight.bold)))
-        ],
-        rows: list,
-      ),
-    );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: listaDeLista.length,
+          itemBuilder: (context, index) {
+            final itemLista = listaDeLista[index];
+            return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          "Vendedor(a): ${itemLista[0].apelido}",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        )),
+                    DataTable(columns: [
+                      DataColumn(
+                          label: Text("Produto",
+                              style: TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Quantidade",
+                              style: TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Valor",
+                              style: TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Custo",
+                              style: TextStyle(fontWeight: FontWeight.bold))),
+                    ], rows: criarRows(itemLista)),
+                  ],
+                ));
+          }),
+      SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                      "Custo total de itens vendidos: ${_custo.toStringAsFixed(0)}",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold))),
+              Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                      "Valor total das vendas: R\$ ${_valorTotal.toStringAsFixed(2)}",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold))),
+            ],
+          ))
+    ]);
   }
 
   void _exibirFiliais() async {
