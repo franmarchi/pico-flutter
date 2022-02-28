@@ -1,10 +1,8 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 class RelatorioGerencialGraficoVendasporAno {
   String _mes = "";
   double _total = 0;
-  //charts.Color cor = charts.ColorUtil.fromDartColor(Colors.red);
 
   RelatorioGerencialGraficoVendasporAno();
 
@@ -26,6 +24,6 @@ class RelatorioGerencialGraficoVendasporAno {
 
   RelatorioGerencialGraficoVendasporAno.fromMap(Map retorno) {
     this.mes = retorno["mes"] ?? "";
-    this.total = double.parse(retorno["Total"]);
+    this.total = double.parse(retorno["Total"] ?? 0);
   }
 }

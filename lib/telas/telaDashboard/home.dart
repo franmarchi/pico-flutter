@@ -135,33 +135,32 @@ class _HomeState extends State<Home> {
                             Navigator.pop(context);
                           },
                         ),
+                        ListTile(
+                          title: Text("Gráfico - Vendas por ano"),
+                          onTap: () {
+                            setState(() {
+                              _telaAtual = 5;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ListTile(
+                          title: Text("Gráfico - Vendas por Filial"),
+                          onTap: () {
+                            setState(() {
+                              _telaAtual = 6;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
                       ],
-                    ),
-                    ListTile(
-                      title: Text("Grafico - Vendas por ano"),
-                      onTap: () {
-                        setState(() {
-                          _telaAtual = 5;
-                        });
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text("Grafico - Vendas por Filial"),
-                      onTap: () {
-                        setState(() {
-                          _telaAtual = 6;
-                        });
-                        Navigator.pop(context);
-                      },
                     ),
                     ListTile(),
                     ListTile(
                       leading: Icon(
                         Icons.info_outline,
                       ),
-                      title: Text("Termos de uso",
-                          style: TextStyle(color: Colors.white)),
+                      title: Text("Termos de uso"),
                       onTap: () {
                         exibirMensagemTermosdeUso();
                       },
@@ -170,8 +169,7 @@ class _HomeState extends State<Home> {
                       leading: Icon(
                         Icons.info_outline,
                       ),
-                      title: Text("Politica de privacidade",
-                          style: TextStyle(color: Colors.white)),
+                      title: Text("Política de privacidade"),
                       onTap: () {
                         exibirMensagemPoliticaPrivacidade();
                       },

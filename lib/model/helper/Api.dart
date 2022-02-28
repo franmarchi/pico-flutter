@@ -256,4 +256,28 @@ class Api {
 
     return relatorio;
   }
+
+  buscarRelatorioGraficoPorFilial(String dataInicial, String dataFinal) async {
+    var urlRecuperarDadosUsuario =
+        Uri.parse(url + "RelatorioGerencialGraficoVendasporFilialScript.php");
+
+    http.Response response;
+    response = await http.post(
+      urlRecuperarDadosUsuario,
+      body: {
+        'dataInicio': '$dataInicial',
+        'dataFim': '$dataFinal',
+      },
+    );
+
+    String retorno = jsonDecode(jsonEncode(response.body));
+
+    retorno = retorno.replaceAll("}", "}/");
+    retorno = retorno.replaceAll("'", "");
+    List relatorio = retorno.split("/");
+
+    relatorio.removeLast();
+
+    return relatorio;
+  }
 }

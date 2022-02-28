@@ -29,6 +29,7 @@ class _TelaGraficoVendasPorAnoState extends State<TelaGraficoVendasPorAno> {
   Api api = Api();
   List<Filiais> _filiais = [];
   List<String> _nomeFiliais = [];
+  String total = "";
 
   void _exibirFiliais() async {
     List listaTemporaria = await api.buscarFiliais();
@@ -72,8 +73,14 @@ class _TelaGraficoVendasPorAnoState extends State<TelaGraficoVendasPorAno> {
     List listaTemporaria =
         await api.buscarRelatorioGraficoPorAno(_ano, filialEscolhida);
 
-    List? relatorioRecuperado = [];
+    List<GraficoporAnoSeries>? relatorioRecuperado = [];
     if (listaTemporaria.length == 0) {
+      setState(() {
+        _mensagem = "Não há dados para o período selecionado!";
+      });
+    }
+
+    if (listDadosGrafico.length == 0) {
       setState(() {
         _mensagem = "Não há dados para o período selecionado!";
       });
@@ -88,23 +95,18 @@ class _TelaGraficoVendasPorAnoState extends State<TelaGraficoVendasPorAno> {
 
       GraficoporAnoSeries graficoporAnoSeries = GraficoporAnoSeries(
           relatorioGerencialGraficoVendasporAno.mes,
-          relatorioGerencialGraficoVendasporAno
-              .total /* relatorioGerencialGraficoVendasporAno.cor*/);
+          relatorioGerencialGraficoVendasporAno.total);
+
+      total = relatorioGerencialGraficoVendasporAno.total.toString();
 
       relatorioRecuperado.add(graficoporAnoSeries);
     }
 
-    listDadosGrafico = relatorioRecuperado as List<GraficoporAnoSeries>;
-
-    print(listDadosGrafico.length);
-
     setState(() {
-      _relatorio = relatorioRecuperado;
+      listDadosGrafico = relatorioRecuperado!;
     });
 
-    gerarGrafico();
-
-    //relatorioRecuperado = null;
+    relatorioRecuperado = null;
   }
 
   gerarGrafico() {
@@ -114,30 +116,17 @@ class _TelaGraficoVendasPorAnoState extends State<TelaGraficoVendasPorAno> {
         data: listDadosGrafico,
         domainFn: (GraficoporAnoSeries series, _) => series.mes,
         measureFn: (GraficoporAnoSeries series, _) => series.total,
-        //colorFn: (GraficoporAnoSeries series, _) => series.cor,
+        labelAccessorFn: (GraficoporAnoSeries series, _) =>
+            'R\$ ${series.total.toString()}',
       )
     ];
 
-    return charts.BarChart(series, animate: false);
-    /*return Scaffold(
-      body: Center(
-          child: Container(
-        height: 400,
-        padding: EdgeInsets.all(20),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: charts.BarChart(series, animate: false),
-                ),
-              ],
-            ),
-          ),
-        ),
-      )),
-    );*/
+    return charts.BarChart(
+      series,
+      animate: true,
+      vertical: false,
+      barRendererDecorator: new charts.BarLabelDecorator<String>(),
+    );
   }
 
   @override
@@ -229,6 +218,24 @@ class _TelaGraficoVendasPorAnoState extends State<TelaGraficoVendasPorAno> {
                     SizedBox(
                       height: 20,
                     ),
+                    listDadosGrafico.length > 0
+                        ? Center(
+                            child: Container(
+                                height: 400,
+                                padding: EdgeInsets.all(20),
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: gerarGrafico(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )))
+                        : Text(_mensagem)
                   ],
                 ),
               )));
